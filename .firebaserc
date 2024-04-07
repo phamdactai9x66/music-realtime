@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "music-realtime-34252"
-  }
+    "default": "music-realtime-34252",
+    "uat": "test12-873e4"
+  },
+  "targets": {},
+  "etags": {}
 }
