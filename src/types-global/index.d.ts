@@ -1,7 +1,9 @@
-export {}
+/// <reference types="vite/client" />
+
+export {};
 
 declare global {
-    interface Window {
-        callbackFn: () => void;
-    }
+  interface Window {
+    callbackFn: () => void;
+  }
 }
