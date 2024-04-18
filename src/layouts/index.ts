@@ -1,6 +1,4 @@
 import Header from "./Header";
+import Main from "./Main";
 
-
-export {
-    Header
-}
+export { Header, Main };

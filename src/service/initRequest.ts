@@ -1,4 +1,4 @@
-import { EnhancedStore } from "@reduxjs/toolkit";
+import { Action, Store } from "@reduxjs/toolkit";
 import axios, { AxiosRequestConfig } from "axios";
 import { increment } from "src/store/counterSlice";
 
@@ -15,7 +15,7 @@ const axiosClient = axios.create({
   withCredentials: false,
 });
 
-export const initRequest = (action: EnhancedStore<looseObj>) => {
+export const initRequest = (action: Store<unknown, Action>) => {
   // handle request api
   axios.interceptors.request.use(
     function (request) {

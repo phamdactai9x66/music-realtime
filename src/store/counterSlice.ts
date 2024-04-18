@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TYPE_REDUCER } from "./configureStore";
 
 export type counterType = {
   counter: number;
@@ -10,7 +9,7 @@ const initialState: counterType = {
 };
 
 export const counterSlice = createSlice({
-  name: TYPE_REDUCER.COUNTER,
+  name: "APP/COUNTER",
   initialState,
   reducers: {
     increment: (state) => {
