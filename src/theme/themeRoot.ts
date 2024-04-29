@@ -4,7 +4,7 @@ import Dark from "./dark";
 import Light from "./light";
 
 const useThemeRoot = () => {
-  const [Mode] = React.useState("");
+  const [Mode] = React.useState(false);
 
   const theme = React.useMemo(() => createTheme(Mode ? Light : Dark), [Mode]);
 

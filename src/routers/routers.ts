@@ -9,7 +9,12 @@ import { Main } from "src/layouts";
 
 export const PATH_ROUTER = {
   ROOT: "/",
-  LOGIN: "login",
+  LOGIN: "/login",
+};
+
+export const LABEL_PATH = {
+  [PATH_ROUTER.ROOT]: "Home",
+  [PATH_ROUTER.LOGIN]: "Login",
 };
 
 const router = createBrowserRouter([
@@ -26,7 +31,7 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: Home,
-        loader: protectedLoader,
+        // loader: protectedLoader,
       },
       {
         Component: Login,
