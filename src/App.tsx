@@ -5,14 +5,25 @@ import "./App.css";
 import router from "src/routers/routers";
 import { initRequest } from "./service/initRequest";
 import { useStore } from "react-redux";
+import { ThemeProvider } from "@emotion/react";
+import useThemeRoot from "./theme/themeRoot.ts";
+import { CssBaseline } from "@mui/material";
+
 // import { store } from "./store/configureStore";
 
 function App() {
+  const theme = useThemeRoot();
+
   const store = useStore();
 
   initRequest(store);
 
-  return <RouterProvider router={router} fallbackElement={<>loading...</>} />;
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} fallbackElement={<>loading...</>} />
+    </ThemeProvider>
+  );
 }
 
 export default App;

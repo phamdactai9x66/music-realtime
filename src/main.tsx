@@ -6,11 +6,13 @@ import "./service/firebase.ts";
 // import { initRequest } from "./service/initRequest.ts";
 import { Provider } from "react-redux";
 import { store } from "./store/configureStore";
+import { CssBaseline } from "@mui/material";
 
 const callBack = () => {
   return ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <Provider store={store}>
+        <CssBaseline />
         <App />
       </Provider>
     </React.StrictMode>
