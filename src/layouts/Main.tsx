@@ -143,7 +143,7 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {[PATH_ROUTER.ROOT, PATH_ROUTER.LOGIN].map((path, index) => (
+          {Object.values(PATH_ROUTER).map((path, index) => (
             <ListItem key={path} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{

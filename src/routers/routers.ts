@@ -5,16 +5,24 @@ import {
 } from "react-router-dom";
 import Home from "src/features/Home/Home";
 import Login from "src/features/Login";
+import Rooms from "src/features/Rooms";
+
 import { Main } from "src/layouts";
 
 export const PATH_ROUTER = {
   ROOT: "/",
   LOGIN: "/login",
+  ROOMS: "/rooms",
 };
 
 export const LABEL_PATH = {
   [PATH_ROUTER.ROOT]: "Home",
   [PATH_ROUTER.LOGIN]: "Login",
+  [PATH_ROUTER.ROOMS]: "Rooms",
+};
+
+export const DISPLAY_AUDIO = {
+  [PATH_ROUTER.ROOT]: true,
 };
 
 const router = createBrowserRouter([
@@ -36,6 +44,10 @@ const router = createBrowserRouter([
       {
         Component: Login,
         path: PATH_ROUTER.LOGIN,
+      },
+      {
+        Component: Rooms,
+        path: PATH_ROUTER.ROOMS,
       },
     ],
   },

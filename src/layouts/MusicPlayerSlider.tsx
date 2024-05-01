@@ -8,6 +8,8 @@ import PauseRounded from "@mui/icons-material/PauseRounded";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import FastForwardRounded from "@mui/icons-material/FastForwardRounded";
 import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
+import { useLocation } from "react-router-dom";
+import { DISPLAY_AUDIO } from "src/routers/routers";
 
 const useStyle = makeStyles((theme: Theme) => {
   console.log(theme);
@@ -40,6 +42,8 @@ const CoverImage = styled("div")(() => ({
 export default function MusicPlayerSlider() {
   const theme = useTheme();
 
+  const location = useLocation();
+
   const classes = useStyle();
 
   const [paused, setPaused] = React.useState(false);
@@ -49,7 +53,11 @@ export default function MusicPlayerSlider() {
   return (
     <Box
       className={classes.containerBox}
-      sx={{ width: "100%", overflow: "hidden" }}
+      sx={{
+        width: "100%",
+        overflow: "hidden",
+        visibility: DISPLAY_AUDIO[location.pathname] ? "visible" : "hidden",
+      }}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <CoverImage>
