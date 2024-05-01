@@ -14,7 +14,7 @@ const ListSongs = () => {
         width: "100%",
         bgcolor: "background.paper",
         overflow: "auto",
-        maxHeight: "70vh",
+        maxHeight: "calc(100vh - 200px)",
         paddingRight: (theme) => {
           return theme.spacing(2);
         },

@@ -19,6 +19,7 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LABEL_PATH, PATH_ROUTER } from "src/routers/routers";
+import MusicPlayerSlider from "./MusicPlayerSlider";
 
 const drawerWidth = 240;
 
@@ -173,6 +174,7 @@ export default function MiniDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Outlet />
+        <MusicPlayerSlider />
       </Box>
     </Box>
   );
