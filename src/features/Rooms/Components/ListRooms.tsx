@@ -81,13 +81,9 @@ const ListRooms = () => {
         const { _id, nameRoom, users } = e;
 
         return (
-          <React.Fragment>
+          <React.Fragment key={_id}>
             {/* render room */}
-            <ListItem
-              alignItems="flex-start"
-              key={_id}
-              onClick={handleNavigate(_id)}
-            >
+            <ListItem alignItems="flex-start" onClick={handleNavigate(_id)}>
               {/* name room */}
               <ListItemText
                 primary={nameRoom}
@@ -105,7 +101,11 @@ const ListRooms = () => {
                     {/* list avatars */}
                     <AvatarGroup total={users.length}>
                       {users.map((user) => (
-                        <Avatar alt={user.fullName} src={user.image} />
+                        <Avatar
+                          key={user._id}
+                          alt={user.fullName}
+                          src={user.image}
+                        />
                       ))}
                     </AvatarGroup>
                   </Box>
