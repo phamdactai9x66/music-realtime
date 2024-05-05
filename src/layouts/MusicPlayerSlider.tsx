@@ -8,11 +8,11 @@ import PauseRounded from "@mui/icons-material/PauseRounded";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import FastForwardRounded from "@mui/icons-material/FastForwardRounded";
 import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { DISPLAY_AUDIO } from "src/routers/routers";
+import { getRouteMatchPath, isMatchRouters } from "src/utils";
 
 const useStyle = makeStyles((theme: Theme) => {
-  console.log(theme);
   return {
     containerBox: {
       position: "fixed",
@@ -44,7 +44,7 @@ export default function MusicPlayerSlider() {
 
   const location = useLocation();
 
-  const params = useParams();
+  const currentPattern = getRouteMatchPath(isMatchRouters(), location);
 
   const classes = useStyle();
 
@@ -58,7 +58,7 @@ export default function MusicPlayerSlider() {
       sx={{
         width: "100%",
         overflow: "hidden",
-        visibility: DISPLAY_AUDIO[location.pathname] ? "visible" : "hidden",
+        visibility: DISPLAY_AUDIO?.[currentPattern] ? "visible" : "hidden",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -80,17 +80,7 @@ export default function MusicPlayerSlider() {
           </Typography>
         </Box>
       </Box>
-      {/* <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mt: -2,
-        }}
-      >
-        <TinyText>{formatDuration(position)}</TinyText>
-        <TinyText>-{formatDuration(duration - position)}</TinyText>
-      </Box> */}
+
       <Box
         sx={{
           display: "flex",

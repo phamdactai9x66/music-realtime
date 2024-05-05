@@ -1,8 +1,4 @@
-import {
-  LoaderFunctionArgs,
-  createBrowserRouter,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Home from "src/features/Home/Home";
 import Login from "src/features/Login";
 import Rooms from "src/features/Rooms";
@@ -10,7 +6,7 @@ import RoomDetail from "src/features/RoomDetail";
 
 import { Main } from "src/layouts";
 
-export const PATH_ROUTER = {
+export const PATH_ROUTER: looseObj = {
   ROOT: "/",
   LOGIN: "/login",
   ROOMS: "/rooms",
@@ -30,7 +26,7 @@ export const LABEL_PATH = {
   [PATH_ROUTER.ROOM_DETAIL]: "Room Detail",
 };
 
-export const DISPLAY_AUDIO = {
+export const DISPLAY_AUDIO: looseObj = {
   [PATH_ROUTER.ROOT]: true,
   [PATH_ROUTER.ROOM_DETAIL]: true,
 };
@@ -66,16 +62,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-function protectedLoader({ request }: LoaderFunctionArgs) {
-  // If the user is not logged in and tries to access `/protected`, we redirect
-  // them to `/login` with a `from` parameter that allows login to redirect back
-  // to this page upon successful authentication
-  const params = new URLSearchParams();
-
-  params.set("from", new URL(request.url).pathname);
-
-  return redirect("/login?" + params.toString());
-}
 
 export default router;
