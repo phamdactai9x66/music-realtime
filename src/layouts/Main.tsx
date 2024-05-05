@@ -18,7 +18,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { LABEL_PATH, PATH_ROUTER } from "src/routers/routers";
+import { LABEL_PATH, NAB_ROUTER, PATH_ROUTER } from "src/routers/routers";
 import MusicPlayerSlider from "./MusicPlayerSlider";
 
 const drawerWidth = 240;
@@ -143,7 +143,7 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {Object.values(PATH_ROUTER).map((path, index) => (
+          {Object.values(NAB_ROUTER).map((path, index) => (
             <ListItem key={path} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{

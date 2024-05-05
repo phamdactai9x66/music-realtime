@@ -4,17 +4,29 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
-import ListSongs from "src/components/ui/ListItems";
+import ListRooms from "src/components/ui/ListItems";
+import UserActive from "./Components/UserActive";
+import { makeStyles } from "@mui/styles";
+import { Box } from "@mui/material";
 
-type HomeProps = object & React.PropsWithChildren;
+const useStyle = makeStyles(() => {
+  return {
+    container: { display: "flex", flexWrap: "wrap", flexDirection: "column" },
+  };
+});
 
-const Home: React.FC<HomeProps> = () => {
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
+type RoomsProps = object & React.PropsWithChildren;
+
+const Rooms: React.FC<RoomsProps> = () => {
+  const classes = useStyle();
+
+  const renderInputSearch = () => {
+    return (
       <FormControl fullWidth sx={{ m: 1 }}>
         <InputLabel htmlFor="outlined-adornment-amount">
           Search Songs
         </InputLabel>
+
         <OutlinedInput
           id="outlined-adornment-amount"
           startAdornment={
@@ -25,10 +37,20 @@ const Home: React.FC<HomeProps> = () => {
           label="Search Songs"
         />
       </FormControl>
+    );
+  };
 
-      <ListSongs />
+  return (
+    <div className={classes.container}>
+      <UserActive />
+
+      <Box sx={{ m: 1 }}></Box>
+
+      {renderInputSearch()}
+
+      <ListRooms />
     </div>
   );
 };
 
-export default Home;
+export default Rooms;

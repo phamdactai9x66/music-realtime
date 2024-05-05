@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -7,10 +7,64 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 
-import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { PATH_ROUTER } from "src/routers/routers";
+
+const fakeData = [
+  {
+    _id: 0,
+    nameRoom: "Brunch this weekend?",
+    users: [
+      {
+        _id: 0,
+        fullName: "tai Pham",
+        image: "",
+      },
+      {
+        _id: 1,
+        fullName: "thang Pham",
+        image: "",
+      },
+      {
+        _id: 2,
+        fullName: "teo Pham",
+        image: "",
+      },
+    ],
+  },
+  {
+    _id: 1,
+    nameRoom: "Summer BBQ",
+    users: [
+      {
+        _id: 0,
+        fullName: "tai Pham",
+        image: "",
+      },
+      {
+        _id: 1,
+        fullName: "thang Pham",
+        image: "",
+      },
+      {
+        _id: 2,
+        fullName: "teo Pham",
+        image: "",
+      },
+    ],
+  },
+];
 
 const ListRooms = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (idRoom: number) => () => {
+    if ((idRoom ?? null) === null) return;
+
+    navigate(`${PATH_ROUTER.ROOMS}/${idRoom}`);
+  };
+
   return (
     <List
       sx={{
@@ -23,89 +77,49 @@ const ListRooms = () => {
         },
       }}
     >
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary="Brunch this weekend?"
-          secondary={
-            <Box
-              sx={{
-                display: "flex",
-                "& .MuiAvatar-root": {
-                  width: 24,
-                  height: 24,
-                  fontSize: 14,
-                },
-              }}
+      {fakeData.map((e, index) => {
+        const { _id, nameRoom, users } = e;
+
+        return (
+          <React.Fragment>
+            {/* render room */}
+            <ListItem
+              alignItems="flex-start"
+              key={_id}
+              onClick={handleNavigate(_id)}
             >
-              <AvatarGroup total={24}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                <Avatar
-                  alt="Trevor Henderson"
-                  src="/static/images/avatar/5.jpg"
-                />
-              </AvatarGroup>
-            </Box>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary="Summer BBQ"
-          secondary={
-            <Box
-              sx={{
-                display: "flex",
-                "& .MuiAvatar-root": {
-                  width: 24,
-                  height: 24,
-                  fontSize: 14,
-                },
-              }}
-            >
-              <AvatarGroup total={24}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                <Avatar
-                  alt="Trevor Henderson"
-                  src="/static/images/avatar/5.jpg"
-                />
-              </AvatarGroup>
-            </Box>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary="Oui Oui"
-          secondary={
-            <Box
-              sx={{
-                display: "flex",
-                "& .MuiAvatar-root": {
-                  width: 24,
-                  height: 24,
-                  fontSize: 14,
-                },
-              }}
-            >
-              <AvatarGroup total={24}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                <Avatar
-                  alt="Trevor Henderson"
-                  src="/static/images/avatar/5.jpg"
-                />
-              </AvatarGroup>
-            </Box>
-          }
-        />
-      </ListItem>
+              {/* name room */}
+              <ListItemText
+                primary={nameRoom}
+                secondary={
+                  <Box
+                    sx={{
+                      display: "flex",
+                      "& .MuiAvatar-root": {
+                        width: 24,
+                        height: 24,
+                        fontSize: 14,
+                      },
+                    }}
+                  >
+                    {/* list avatars */}
+                    <AvatarGroup total={users.length}>
+                      {users.map((user) => (
+                        <Avatar alt={user.fullName} src={user.image} />
+                      ))}
+                    </AvatarGroup>
+                  </Box>
+                }
+              />
+            </ListItem>
+
+            {/* if this row is last item don't show divider */}
+            {fakeData.length != index && (
+              <Divider variant="middle" component="li" />
+            )}
+          </React.Fragment>
+        );
+      })}
     </List>
   );
 };

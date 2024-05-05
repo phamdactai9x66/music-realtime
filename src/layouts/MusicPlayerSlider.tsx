@@ -8,7 +8,7 @@ import PauseRounded from "@mui/icons-material/PauseRounded";
 import PlayArrowRounded from "@mui/icons-material/PlayArrowRounded";
 import FastForwardRounded from "@mui/icons-material/FastForwardRounded";
 import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { DISPLAY_AUDIO } from "src/routers/routers";
 
 const useStyle = makeStyles((theme: Theme) => {
@@ -43,6 +43,8 @@ export default function MusicPlayerSlider() {
   const theme = useTheme();
 
   const location = useLocation();
+
+  const params = useParams();
 
   const classes = useStyle();
 
