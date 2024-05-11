@@ -7,7 +7,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListRooms from "src/components/ui/ListItems";
 import UserActive from "./Components/UserActive";
 import { makeStyles } from "@mui/styles";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import MenuItems from "src/components/ui/MenuItem";
 
 const useStyle = makeStyles(() => {
   return {
@@ -42,7 +43,10 @@ const Rooms: React.FC<RoomsProps> = () => {
 
   return (
     <div className={classes.container}>
-      <UserActive />
+      <Stack flexDirection={"row"} justifyContent={"space-between"}>
+        <UserActive />
+        <MenuItems />
+      </Stack>
 
       <Box sx={{ m: 1 }}></Box>
 
