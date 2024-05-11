@@ -7,9 +7,11 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
+
+import KeyIcon from "@mui/icons-material/Key";
 
 const fakeData = [
   {
@@ -91,6 +93,8 @@ const ListRooms = () => {
                   <Box
                     sx={{
                       display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                       "& .MuiAvatar-root": {
                         width: 24,
                         height: 24,
@@ -108,6 +112,9 @@ const ListRooms = () => {
                         />
                       ))}
                     </AvatarGroup>
+                    <IconButton>
+                      <KeyIcon />
+                    </IconButton>
                   </Box>
                 }
               />
