@@ -38,7 +38,7 @@ export default function StandardImageList() {
 
       <Stack spacing={2}>
         <Pagination
-          count={10}
+          count={4}
           variant="outlined"
           shape="rounded"
           sx={{ display: "flex", justifyContent: "flex-end" }}
