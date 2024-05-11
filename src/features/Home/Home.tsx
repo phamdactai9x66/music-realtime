@@ -5,13 +5,22 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
 import ListSongs from "src/components/ui/ListItems";
+import SlideImage from "./Components/SlideImage";
 
 type HomeProps = object & React.PropsWithChildren;
 
 const Home: React.FC<HomeProps> = () => {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
-      <FormControl fullWidth sx={{ m: 1 }}>
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 8,
+      }}
+    >
+      <SlideImage />
+
+      <FormControl fullWidth sx={{ mt: 1, mb: 1 }}>
         <InputLabel htmlFor="outlined-adornment-amount">
           Search Songs
         </InputLabel>
