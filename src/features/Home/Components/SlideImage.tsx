@@ -21,7 +21,7 @@ export default function StandardImageList() {
   const classes = useStyles();
 
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       <Typography>My Favorite</Typography>
       <ImageList cols={3} className={classes.containerImage}>
         {itemData.map((item) => (
