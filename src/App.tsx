@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import "./App.css";
 
 import router from "src/routers/routers";
-import { initRequest } from "./service/initRequest";
+import { initRequest } from "./service/httpRequest.ts";
 import { useStore } from "react-redux";
 import { ThemeProvider } from "@mui/styles";
 import useThemeRoot from "./theme/themeRoot.ts";
