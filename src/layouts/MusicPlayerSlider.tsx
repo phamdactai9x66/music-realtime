@@ -12,6 +12,18 @@ import { useLocation } from "react-router-dom";
 import { DISPLAY_AUDIO } from "src/routers/routers";
 import { getRouteMatchPath, isMatchRouters } from "src/utils";
 
+const LIST_AUDIO = [
+  {
+    title: "awd",
+    url: "https://firebasestorage.googleapis.com/v0/b/music-realtime-34252.appspot.com/o/StockTune-Evening%20Velvet%20Chill_1716113269.mp3?alt=media&token=58b99e15-c0cc-4e44-9e73-3022bf3a2963",
+  },
+
+  {
+    title: "awd1231",
+    url: "https://cdn.simplecast.com/audio/cae8b0eb-d9a9-480d-a652-0defcbe047f4/episodes/af52a99b-88c0-4638-b120-d46e142d06d3/audio/500344fb-2e2b-48af-be86-af6ac341a6da/default_tc.mp3",
+  },
+];
+
 const useStyle = makeStyles((theme: Theme) => {
   return {
     containerBox: {
@@ -42,15 +54,42 @@ const CoverImage = styled("div")(() => ({
 export default function MusicPlayerSlider() {
   const theme = useTheme();
 
+  const audioPlayer = React.useRef<HTMLAudioElement>(null); // reference our audio component
+
+  const [audio, setAudio] = React.useState(LIST_AUDIO[0]);
+
   const location = useLocation();
+
+  const [isPlaying, setIsPlaying] = React.useState(false);
 
   const currentPattern = getRouteMatchPath(isMatchRouters(), location);
 
   const classes = useStyle();
 
-  const [paused, setPaused] = React.useState(false);
-
   const mainIconColor = theme.palette.mode === "dark" ? "#fff" : "#000";
+
+  const togglePlayPause = () => {
+    if (!audioPlayer.current) return;
+
+    const prevValue = isPlaying;
+
+    setIsPlaying(!prevValue);
+
+    if (!prevValue) return audioPlayer.current.play();
+
+    audioPlayer.current.pause();
+  };
+
+  // const nextSong = (step: number) => () => {
+  //   const nextSong = LIST_AUDIO.findIndex((e) => e.title == audio.title);
+
+  //   if (nextSong != -1 && audioPlayer.current) {
+  //     setAudio(LIST_AUDIO[nextSong + step]);
+
+  //     audioPlayer.current.currentTime = 0;
+  //     setIsPlaying(false);
+  //   }
+  // };
 
   return (
     <Box
@@ -61,6 +100,8 @@ export default function MusicPlayerSlider() {
         visibility: DISPLAY_AUDIO?.[currentPattern] ? "visible" : "hidden",
       }}
     >
+      <audio ref={audioPlayer} src={audio.url}></audio>
+
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <CoverImage>
           <img
@@ -93,10 +134,10 @@ export default function MusicPlayerSlider() {
           <FastRewindRounded fontSize="large" htmlColor={mainIconColor} />
         </IconButton>
         <IconButton
-          aria-label={paused ? "play" : "pause"}
-          onClick={() => setPaused(!paused)}
+          aria-label={isPlaying ? "play" : "pause"}
+          onClick={togglePlayPause}
         >
-          {paused ? (
+          {isPlaying ? (
             <PlayArrowRounded
               sx={{ fontSize: "3rem" }}
               htmlColor={mainIconColor}
