@@ -4,6 +4,7 @@ import {
   get,
   getDatabase,
   push,
+  query,
   ref,
   remove,
   set,
@@ -52,10 +53,13 @@ export const initRequest = (action: Store<unknown, Action>) => {
 class httpRequest {
   private db = getDatabase;
 
-  async getData<T = looseObj>(url: string): Promise<T[]> {
-    const data = await get(ref(this.db(), url));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getData<T = looseObj>(url: string, ...rest: any): Promise<T[]> {
+    const queryApi = query(ref(this.db(), url), ...rest);
 
-    const convertData = Object.entries(data.val()) as T[][];
+    const data = await get(queryApi);
+
+    const convertData = Object.entries(data.val() || []) as T[][];
 
     const mapKey = convertData.reduce((pre, cur) => {
       const [_id, values] = cur;

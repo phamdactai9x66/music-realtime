@@ -10,12 +10,10 @@ import { CssBaseline } from "@mui/material";
 
 const callBack = () => {
   return ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <CssBaseline />
-        <App />
-      </Provider>
-    </React.StrictMode>
+    <Provider store={store}>
+      <CssBaseline />
+      <App />
+    </Provider>
   );
 };
 
