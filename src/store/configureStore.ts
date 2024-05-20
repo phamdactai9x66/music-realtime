@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import counterReducer from "./counterSlice";
+import counterReducer from "./SongSlice";
 
 export const TYPE_REDUCER = {
-  COUNTER: "APP/COUNTER",
+  SONG: "APP/SONG",
 };
 
 export const store = configureStore({
   reducer: {
-    [TYPE_REDUCER.COUNTER]: counterReducer,
+    [TYPE_REDUCER.SONG]: counterReducer,
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware();

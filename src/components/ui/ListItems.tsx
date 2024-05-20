@@ -11,6 +11,7 @@ import { makeStyles } from "@mui/styles";
 
 type ListSongsProps = {
   data: looseObj[];
+  onClick?: (data: looseObj) => void;
 } & React.PropsWithChildren;
 
 const useStyle = makeStyles((theme: Theme) => {
@@ -26,7 +27,7 @@ const useStyle = makeStyles((theme: Theme) => {
 });
 
 const ListSongs: React.FC<ListSongsProps> = (props) => {
-  const { data = [] } = props || {};
+  const { data = [], onClick } = props || {};
 
   const classes = useStyle();
 
@@ -43,7 +44,11 @@ const ListSongs: React.FC<ListSongsProps> = (props) => {
         } = data;
         return (
           <Box key={_id}>
-            <ListItem alignItems="flex-start">
+            <ListItem
+              alignItems="flex-start"
+              onClick={() => onClick?.(data)}
+              sx={{ cursor: "pointer" }}
+            >
               {/* image song */}
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src={image_song || ""} />

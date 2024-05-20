@@ -11,18 +11,8 @@ import FastRewindRounded from "@mui/icons-material/FastRewindRounded";
 import { useLocation } from "react-router-dom";
 import { DISPLAY_AUDIO } from "src/routers/routers";
 import { getRouteMatchPath, isMatchRouters } from "src/utils";
-
-const LIST_AUDIO = [
-  {
-    title: "awd",
-    url: "https://firebasestorage.googleapis.com/v0/b/music-realtime-34252.appspot.com/o/StockTune-Evening%20Velvet%20Chill_1716113269.mp3?alt=media&token=58b99e15-c0cc-4e44-9e73-3022bf3a2963",
-  },
-
-  {
-    title: "awd1231",
-    url: "https://cdn.simplecast.com/audio/cae8b0eb-d9a9-480d-a652-0defcbe047f4/episodes/af52a99b-88c0-4638-b120-d46e142d06d3/audio/500344fb-2e2b-48af-be86-af6ac341a6da/default_tc.mp3",
-  },
-];
+import { useSelector } from "react-redux";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 
 const useStyle = makeStyles((theme: Theme) => {
   return {
@@ -54,9 +44,33 @@ const CoverImage = styled("div")(() => ({
 export default function MusicPlayerSlider() {
   const theme = useTheme();
 
-  const audioPlayer = React.useRef<HTMLAudioElement>(null); // reference our audio component
+  const currentSong = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.SONG]
+  );
 
-  const [audio, setAudio] = React.useState(LIST_AUDIO[0]);
+  React.useEffect(() => {
+    if (audioPlayer.current && currentSong.audio_url) {
+      // reset new song
+
+      audioPlayer.current.currentTime = 0;
+
+      audioPlayer.current.play();
+
+      return setIsPlaying(true);
+    }
+    return () => {
+      // trigger when switching song
+
+      if (audioPlayer.current && currentSong.audio_url) {
+        // pause old song
+        audioPlayer.current.pause();
+
+        setIsPlaying(false);
+      }
+    };
+  }, [currentSong.audio_url]);
+
+  const audioPlayer = React.useRef<HTMLAudioElement>(null); // reference our audio component
 
   const location = useLocation();
 
@@ -80,17 +94,6 @@ export default function MusicPlayerSlider() {
     audioPlayer.current.pause();
   };
 
-  // const nextSong = (step: number) => () => {
-  //   const nextSong = LIST_AUDIO.findIndex((e) => e.title == audio.title);
-
-  //   if (nextSong != -1 && audioPlayer.current) {
-  //     setAudio(LIST_AUDIO[nextSong + step]);
-
-  //     audioPlayer.current.currentTime = 0;
-  //     setIsPlaying(false);
-  //   }
-  // };
-
   return (
     <Box
       className={classes.containerBox}
@@ -100,7 +103,7 @@ export default function MusicPlayerSlider() {
         visibility: DISPLAY_AUDIO?.[currentPattern] ? "visible" : "hidden",
       }}
     >
-      <audio ref={audioPlayer} src={audio.url}></audio>
+      <audio ref={audioPlayer} src={currentSong.audio_url}></audio>
 
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <CoverImage>
@@ -138,12 +141,12 @@ export default function MusicPlayerSlider() {
           onClick={togglePlayPause}
         >
           {isPlaying ? (
+            <PauseRounded sx={{ fontSize: "3rem" }} htmlColor={mainIconColor} />
+          ) : (
             <PlayArrowRounded
               sx={{ fontSize: "3rem" }}
               htmlColor={mainIconColor}
             />
-          ) : (
-            <PauseRounded sx={{ fontSize: "3rem" }} htmlColor={mainIconColor} />
           )}
         </IconButton>
         <IconButton aria-label="next song">

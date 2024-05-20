@@ -10,7 +10,7 @@ import {
   set,
   update,
 } from "firebase/database";
-import { increment } from "src/store/counterSlice";
+// import { increment } from "src/store/SongSlice";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const axiosClient = axios.create({
@@ -37,7 +37,7 @@ export const initRequest = (action: Store<unknown, Action>) => {
 
   axios.interceptors.response.use(
     function (response) {
-      action.dispatch(increment());
+      // action.dispatch(increment());
       //Dispatch any action on success
       return response;
     },

@@ -9,11 +9,16 @@ import SlideImage from "./Components/SlideImage";
 import httpRequest from "src/service/httpRequest";
 import { songUrl } from "src/apis/request";
 import { orderByChild, startAfter } from "firebase/database";
+import { useDispatch } from "react-redux";
+import { songType, triggerSong } from "src/store/SongSlice";
 
 type HomeProps = object & React.PropsWithChildren;
 
 const Home: React.FC<HomeProps> = () => {
   const [songs, setSongs] = React.useState<looseObj[]>([]);
+
+  const dispatch = useDispatch();
+
   const timeOutApp = React.useRef<any>();
 
   const handleApiSongs = async (...query: unknown[]) => {
@@ -21,8 +26,6 @@ const Home: React.FC<HomeProps> = () => {
       const getData = await httpRequest.getData(songUrl(), ...query);
 
       setSongs(getData);
-
-      console.log(getData);
     } catch (error) {
       console.log(error);
     }
@@ -45,6 +48,10 @@ const Home: React.FC<HomeProps> = () => {
 
       handleApiSongs();
     }, 500);
+  };
+
+  const onPlaySong = (data: songType) => {
+    dispatch(triggerSong(data));
   };
 
   React.useEffect(() => {
@@ -77,7 +84,7 @@ const Home: React.FC<HomeProps> = () => {
         />
       </FormControl>
 
-      <ListSongs data={songs} />
+      <ListSongs data={songs} onClick={onPlaySong} />
     </div>
   );
 };
