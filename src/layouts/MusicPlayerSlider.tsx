@@ -48,6 +48,16 @@ export default function MusicPlayerSlider() {
     (state: RootState) => state[TYPE_REDUCER.SONG]
   );
 
+  const audioPlayer = React.useRef<HTMLAudioElement>(null); // reference our audio component
+
+  const location = useLocation();
+
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
+  const currentPattern = getRouteMatchPath(isMatchRouters(), location);
+
+  const classes = useStyle();
+
   React.useEffect(() => {
     if (audioPlayer.current && currentSong.audio_url) {
       // reset new song
@@ -70,15 +80,7 @@ export default function MusicPlayerSlider() {
     };
   }, [currentSong.audio_url]);
 
-  const audioPlayer = React.useRef<HTMLAudioElement>(null); // reference our audio component
-
-  const location = useLocation();
-
-  const [isPlaying, setIsPlaying] = React.useState(false);
-
-  const currentPattern = getRouteMatchPath(isMatchRouters(), location);
-
-  const classes = useStyle();
+  if (!currentSong.audio_url) return;
 
   const mainIconColor = theme.palette.mode === "dark" ? "#fff" : "#000";
 
@@ -107,20 +109,15 @@ export default function MusicPlayerSlider() {
 
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <CoverImage>
-          <img
-            alt="can't win - Chilling Sunday"
-            src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
-          />
+          <img alt="can't win - Chilling Sunday" src={currentSong.image_song} />
         </CoverImage>
         <Box sx={{ ml: 1.5, minWidth: 0 }}>
           <Typography variant="caption" color="text.secondary" fontWeight={500}>
-            Jun Pulse
+            {currentSong?.name_authors}
           </Typography>
-          <Typography noWrap>
-            <b>คนเก่าเขาทำไว้ดี (Can&apos;t win)</b>
-          </Typography>
+          <Typography noWrap>{currentSong?.name_song}</Typography>
           <Typography noWrap letterSpacing={-0.25}>
-            Chilling Sunday &mdash; คนเก่าเขาทำไว้ดี
+            {currentSong?.description}
           </Typography>
         </Box>
       </Box>
