@@ -1,4 +1,8 @@
-import { createBrowserRouter } from "react-router-dom";
+import {
+  LoaderFunction,
+  createBrowserRouter,
+  redirect,
+} from "react-router-dom";
 import Home from "src/features/Home/Home";
 import Login from "src/features/Login";
 import Rooms from "src/features/Rooms";

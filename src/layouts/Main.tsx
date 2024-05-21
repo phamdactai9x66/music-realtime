@@ -20,6 +20,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LABEL_PATH, NAB_ROUTER, PATH_ROUTER } from "src/routers/routers";
 import MusicPlayerSlider from "./MusicPlayerSlider";
+import { useSelector } from "react-redux";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 
 const drawerWidth = 240;
 
@@ -97,6 +99,12 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const currentUser = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER]
+  );
+
+  console.log(currentUser);
 
   const handleDrawerOpen = () => {
     setOpen(true);

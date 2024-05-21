@@ -1,15 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import counterReducer from "./SongSlice";
+import songReducer from "./SongSlice";
+import userReducer from "./UserSlice";
 
 export const TYPE_REDUCER = {
   SONG: "APP/SONG",
+  USER: "APP/USER",
 };
 
 export const store = configureStore({
-  reducer: {
-    [TYPE_REDUCER.SONG]: counterReducer,
-  },
+  reducer: combineReducers({
+    [TYPE_REDUCER.SONG]: songReducer,
+    [TYPE_REDUCER.USER]: userReducer,
+  }),
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware();
   },
