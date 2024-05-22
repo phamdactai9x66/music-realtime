@@ -75,10 +75,21 @@ class httpRequest {
 
     return mapKey;
   }
-  getPost(url: string, data?: looseObj) {
-    const newDatRef = ref(this.db(), url);
 
-    return set(push(newDatRef), data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getOne<T = looseObj>(url: string): Promise<T> {
+    const queryApi = ref(this.db(), url);
+
+    const data = await get(queryApi);
+
+    return data.val() || {};
+  }
+  getPost(url: string, data?: looseObj, autoGenerateId = true) {
+    let newDatRef = ref(this.db(), url);
+
+    if (autoGenerateId) newDatRef = push(newDatRef);
+
+    return set(newDatRef, data);
   }
   getDelete(url: string) {
     const newDatRef = ref(this.db(), url);

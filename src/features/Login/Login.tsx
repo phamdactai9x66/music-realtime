@@ -3,22 +3,25 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import Stack from "@mui/material/Stack";
 
-import { Button, Theme } from "@mui/material";
+import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   FacebookAuthProvider,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { triggerUser } from "src/store/UserSlice";
+import { UserType, loginUser } from "src/store/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
+import httpRequest from "src/service/httpRequest";
+import { userUrl } from "src/apis/request";
 
 type LoginProps = object & React.PropsWithChildren;
 
-const useStyle = makeStyles((theme: Theme) => {
+const useStyle = makeStyles(() => {
   return {
     containerBox: {},
   };
@@ -35,18 +38,26 @@ const Login: React.FC<LoginProps> = () => {
 
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+      .then(async (result) => {
         // The signed-in user info.
-        const user = result.user;
+        const userDetail = getAdditionalUserInfo(result);
 
-        dispatch(triggerUser({ isLogin: true }));
+        const userinfo: looseObj = userDetail?.profile || {};
+
+        const dataResponse = await httpRequest.getOne(userUrl(userinfo.id));
+
+        const isNoLogged = Object.values(dataResponse).length;
+
+        if (isNoLogged) {
+          await httpRequest.getPost(userUrl(userinfo.id), userinfo, false);
+        }
+
+        // if user is new User user data Default, if logged user data detail
+        const userResponse = (isNoLogged ? userinfo : dataResponse) as UserType;
+
+        dispatch(loginUser(userResponse));
 
         navigate(PATH_ROUTER.ROOT);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
       })
       .catch((error) => {
         // Handle Errors here.

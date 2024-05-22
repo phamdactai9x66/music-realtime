@@ -9,8 +9,9 @@ import SlideImage from "./Components/SlideImage";
 import httpRequest from "src/service/httpRequest";
 import { songUrl } from "src/apis/request";
 import { orderByChild, startAfter } from "firebase/database";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { songType, triggerSong } from "src/store/SongSlice";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 
 type HomeProps = object & React.PropsWithChildren;
 
@@ -20,6 +21,12 @@ const Home: React.FC<HomeProps> = () => {
   const dispatch = useDispatch();
 
   const timeOutApp = React.useRef<any>();
+
+  const currentUser = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER]
+  );
+
+  console.log(currentUser);
 
   const handleApiSongs = async (...query: unknown[]) => {
     try {
