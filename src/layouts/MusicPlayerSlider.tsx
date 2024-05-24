@@ -13,6 +13,7 @@ import { DISPLAY_AUDIO } from "src/routers/routers";
 import { getRouteMatchPath, isMatchRouters } from "src/utils";
 import { useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import { songType } from "src/store/SongSlice";
 
 const useStyle = makeStyles((theme: Theme) => {
   return {
@@ -44,7 +45,7 @@ const CoverImage = styled("div")(() => ({
 export default function MusicPlayerSlider() {
   const theme = useTheme();
 
-  const currentSong = useSelector(
+  const currentSong: songType = useSelector(
     (state: RootState) => state[TYPE_REDUCER.SONG]
   );
 
