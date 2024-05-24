@@ -12,56 +12,15 @@ import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
 
 import KeyIcon from "@mui/icons-material/Key";
+import { roomsIf } from "src/models/Room.model";
+type Props = {
+  listRoomData: roomsIf[] | [];
+};
 
-const fakeData = [
-  {
-    _id: 0,
-    nameRoom: "Brunch this weekend?",
-    users: [
-      {
-        _id: 0,
-        fullName: "tai Pham",
-        image: "",
-      },
-      {
-        _id: 1,
-        fullName: "thang Pham",
-        image: "",
-      },
-      {
-        _id: 2,
-        fullName: "teo Pham",
-        image: "",
-      },
-    ],
-  },
-  {
-    _id: 1,
-    nameRoom: "Summer BBQ",
-    users: [
-      {
-        _id: 0,
-        fullName: "tai Pham",
-        image: "",
-      },
-      {
-        _id: 1,
-        fullName: "thang Pham",
-        image: "",
-      },
-      {
-        _id: 2,
-        fullName: "teo Pham",
-        image: "",
-      },
-    ],
-  },
-];
-
-const ListRooms = () => {
+const ListRooms = ({ listRoomData }: Props) => {
   const navigate = useNavigate();
 
-  const handleNavigate = (idRoom: number) => () => {
+  const handleNavigate = (idRoom: string) => () => {
     if ((idRoom ?? null) === null) return;
 
     navigate(`${PATH_ROUTER.ROOMS}/${idRoom}`);
@@ -79,54 +38,59 @@ const ListRooms = () => {
         },
       }}
     >
-      {fakeData.map((e, index) => {
-        const { _id, nameRoom, users } = e;
+      {listRoomData.length > 0 &&
+        listRoomData.map((e, index) => {
+          const { _id, nameRoom, users } = e;
+          const currentUser = Object.values(users).map(() => ({
+            _id: e._id,
+            fullName: e.nameRoom,
+            image: e.password,
+          }));
+          return (
+            <React.Fragment key={_id}>
+              {/* render room */}
+              <ListItem alignItems="flex-start" onClick={handleNavigate(_id)}>
+                {/* name room */}
+                <ListItemText
+                  primary={nameRoom}
+                  secondary={
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        "& .MuiAvatar-root": {
+                          width: 24,
+                          height: 24,
+                          fontSize: 14,
+                        },
+                      }}
+                    >
+                      {/* list avatars */}
+                      <AvatarGroup total={currentUser.length}>
+                        {currentUser.map((user) => (
+                          <Avatar
+                            key={user._id}
+                            alt={user.fullName}
+                            src={user.image}
+                          />
+                        ))}
+                      </AvatarGroup>
+                      <IconButton>
+                        <KeyIcon />
+                      </IconButton>
+                    </Box>
+                  }
+                />
+              </ListItem>
 
-        return (
-          <React.Fragment key={_id}>
-            {/* render room */}
-            <ListItem alignItems="flex-start" onClick={handleNavigate(_id)}>
-              {/* name room */}
-              <ListItemText
-                primary={nameRoom}
-                secondary={
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      "& .MuiAvatar-root": {
-                        width: 24,
-                        height: 24,
-                        fontSize: 14,
-                      },
-                    }}
-                  >
-                    {/* list avatars */}
-                    <AvatarGroup total={users.length}>
-                      {users.map((user) => (
-                        <Avatar
-                          key={user._id}
-                          alt={user.fullName}
-                          src={user.image}
-                        />
-                      ))}
-                    </AvatarGroup>
-                    <IconButton>
-                      <KeyIcon />
-                    </IconButton>
-                  </Box>
-                }
-              />
-            </ListItem>
-
-            {/* if this row is last item don't show divider */}
-            {fakeData.length != index && (
-              <Divider variant="middle" component="li" />
-            )}
-          </React.Fragment>
-        );
-      })}
+              {/* if this row is last item don't show divider */}
+              {listRoomData.length != index && (
+                <Divider component="li" variant="middle" />
+              )}
+            </React.Fragment>
+          );
+        })}
     </List>
   );
 };
