@@ -24,7 +24,6 @@ import {
   NAB_ROUTER_PUBLIC,
 } from "src/routers/routers";
 import MusicPlayerSlider from "./MusicPlayerSlider";
-import useProtectRoute from "src/hook/useProtectRouter";
 import { useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
@@ -114,9 +113,6 @@ export default function MiniDrawer() {
   const routers = React.useMemo(() => {
     return currentUser.isLogin ? NAB_ROUTER_PRIVATE : NAB_ROUTER_PUBLIC;
   }, [currentUser.isLogin]);
-
-  // this force navigate to home when user logged
-  useProtectRoute();
 
   const handleDrawerOpen = () => {
     setOpen(true);
