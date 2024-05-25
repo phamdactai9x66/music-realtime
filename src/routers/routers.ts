@@ -1,8 +1,4 @@
-import {
-  LoaderFunction,
-  createBrowserRouter,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Home from "src/features/Home/Home";
 import Login from "src/features/Login";
 import Rooms from "src/features/Rooms";
@@ -17,11 +13,9 @@ export const PATH_ROUTER: looseObj = {
   ROOM_DETAIL: "/rooms/:idRoom",
 };
 
-export const NAB_ROUTER = {
-  ROOT: "/",
-  LOGIN: "/login",
-  ROOMS: "/rooms",
-};
+export const NAB_ROUTER_PUBLIC = [PATH_ROUTER.ROOT, PATH_ROUTER.LOGIN];
+
+export const NAB_ROUTER_PRIVATE = [PATH_ROUTER.ROOT, PATH_ROUTER.ROOMS];
 
 export const LABEL_PATH = {
   [PATH_ROUTER.ROOT]: "Home",

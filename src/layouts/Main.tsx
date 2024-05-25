@@ -18,9 +18,16 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { LABEL_PATH, NAB_ROUTER } from "src/routers/routers";
+import {
+  LABEL_PATH,
+  NAB_ROUTER_PRIVATE,
+  NAB_ROUTER_PUBLIC,
+} from "src/routers/routers";
 import MusicPlayerSlider from "./MusicPlayerSlider";
 import useProtectRoute from "src/hook/useProtectRouter";
+import { useSelector } from "react-redux";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import { UserType } from "src/store/UserSlice";
 
 const drawerWidth = 240;
 
@@ -99,6 +106,15 @@ export default function MiniDrawer() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const currentUser = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+  );
+
+  // check user whether logged yed or no before render list route
+  const routers = React.useMemo(() => {
+    return currentUser.isLogin ? NAB_ROUTER_PRIVATE : NAB_ROUTER_PUBLIC;
+  }, [currentUser.isLogin]);
+
   // this force navigate to home when user logged
   useProtectRoute();
 
@@ -146,8 +162,9 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+
         <List>
-          {Object.values(NAB_ROUTER).map((path, index) => (
+          {routers.map((path, index) => (
             <ListItem key={path} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
