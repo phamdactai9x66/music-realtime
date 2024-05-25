@@ -18,10 +18,9 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { LABEL_PATH, NAB_ROUTER, PATH_ROUTER } from "src/routers/routers";
+import { LABEL_PATH, NAB_ROUTER } from "src/routers/routers";
 import MusicPlayerSlider from "./MusicPlayerSlider";
-import { useSelector } from "react-redux";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import useProtectRoute from "src/hook/useProtectRouter";
 
 const drawerWidth = 240;
 
@@ -100,11 +99,8 @@ export default function MiniDrawer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const currentUser = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER]
-  );
-
-  console.log(currentUser);
+  // this force navigate to home when user logged
+  useProtectRoute();
 
   const handleDrawerOpen = () => {
     setOpen(true);
