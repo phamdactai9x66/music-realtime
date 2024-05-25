@@ -9,9 +9,9 @@ import SlideImage from "./Components/SlideImage";
 import httpRequest from "src/service/httpRequest";
 import { songUrl } from "src/apis/request";
 import { orderByChild, startAfter } from "firebase/database";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { songType, triggerSong } from "src/store/SongSlice";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import { debounce } from "@mui/material";
 
 type HomeProps = object & React.PropsWithChildren;
 
@@ -19,14 +19,6 @@ const Home: React.FC<HomeProps> = () => {
   const [songs, setSongs] = React.useState<looseObj[]>([]);
 
   const dispatch = useDispatch();
-
-  const timeOutApp = React.useRef<any>();
-
-  const currentUser = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER]
-  );
-
-  console.log(currentUser);
 
   const handleApiSongs = async (...query: unknown[]) => {
     try {
@@ -38,12 +30,8 @@ const Home: React.FC<HomeProps> = () => {
     }
   };
 
-  const onSearchSong = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    timeOutApp.current && clearTimeout(timeOutApp.current);
-
-    timeOutApp.current = setTimeout(() => {
+  const onSearchSong = debounce(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const inputValue = e.target.value;
 
       if (inputValue) {
@@ -54,8 +42,9 @@ const Home: React.FC<HomeProps> = () => {
       }
 
       handleApiSongs();
-    }, 500);
-  };
+    },
+    import.meta.env.VITE_TIME_SEARCH
+  );
 
   const onPlaySong = (data: songType) => {
     dispatch(triggerSong(data));
