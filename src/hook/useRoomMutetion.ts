@@ -1,13 +1,11 @@
 import React from "react";
-import { RoomsUrl } from "src/apis/request";
-import { roomsIf } from "src/models/Room.model";
 import httpRequest from "src/service/httpRequest";
 
 const useRoomMutetion = () => {
-  const [roomsData, setRoomsData] = React.useState<roomsIf[] | []>([]);
+  const [roomsData, setRoomsData] = React.useState<any>([]);
 
-  const searchRooms = async (...query: unknown[]) => {
-    const data = await httpRequest.getData<roomsIf>(RoomsUrl(), ...query);
+  const searchRooms = async <T>(fuc: string, ...query: unknown[]) => {
+    const data = await httpRequest.getData<T>(fuc, ...query);
     setRoomsData(data);
   };
   return {

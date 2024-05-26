@@ -8,6 +8,9 @@ import ListRooms from "./Components/ListRooms";
 import { debounce } from "@mui/material";
 import { orderByChild, startAfter } from "firebase/database";
 import useRoomMutetion from "src/hook/useRoomMutetion";
+import { RoomsUrl } from "src/apis/request";
+import { roomsIf } from "src/models/Room.model";
+
 
 type RoomsProps = object & React.PropsWithChildren;
 
@@ -17,17 +20,18 @@ const Rooms: React.FC<RoomsProps> = () => {
     async (val: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const inputValue = val.target.value;
       if (inputValue) {
-        return await searchRooms(
+        return await searchRooms<roomsIf>(
+          RoomsUrl(),
           orderByChild("nameRoom"),
           startAfter(inputValue)
         );
       }
-      searchRooms();
+      searchRooms<roomsIf>(RoomsUrl());
     },
     500
   );
   React.useEffect(() => {
-    searchRooms();
+    searchRooms<roomsIf>(RoomsUrl());
   }, []);
 
   return (
