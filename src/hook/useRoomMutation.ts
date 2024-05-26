@@ -1,10 +1,10 @@
 import React from "react";
 import httpRequest from "src/service/httpRequest";
 
-const useRoomMutetion = () => {
-  const [roomsData, setRoomsData] = React.useState<any>([]);
+const useRoomMutation = <T>() => {
+  const [roomsData, setRoomsData] = React.useState<T[]>([]);
 
-  const searchRooms = async <T>(fuc: string, ...query: unknown[]) => {
+  const searchRooms = async (fuc: string, ...query: unknown[]) => {
     const data = await httpRequest.getData<T>(fuc, ...query);
     setRoomsData(data);
   };
@@ -14,4 +14,4 @@ const useRoomMutetion = () => {
   };
 };
 
-export default useRoomMutetion;
+export default useRoomMutation;

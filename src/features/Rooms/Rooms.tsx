@@ -7,7 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ListRooms from "./Components/ListRooms";
 import { debounce } from "@mui/material";
 import { orderByChild, startAfter } from "firebase/database";
-import useRoomMutetion from "src/hook/useRoomMutetion";
+import useRoomMutation from "src/hook/useRoomMutation";
 import { RoomsUrl } from "src/apis/request";
 import { roomsIf } from "src/models/Room.model";
 
@@ -15,23 +15,23 @@ import { roomsIf } from "src/models/Room.model";
 type RoomsProps = object & React.PropsWithChildren;
 
 const Rooms: React.FC<RoomsProps> = () => {
-  const { searchRooms, roomsData } = useRoomMutetion();
+  const { searchRooms, roomsData } = useRoomMutation<roomsIf>();
   const onsearchRoom = debounce(
     async (val: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const inputValue = val.target.value;
       if (inputValue) {
-        return await searchRooms<roomsIf>(
+        return await searchRooms(
           RoomsUrl(),
           orderByChild("nameRoom"),
           startAfter(inputValue)
         );
       }
-      searchRooms<roomsIf>(RoomsUrl());
+      searchRooms(RoomsUrl());
     },
     500
   );
   React.useEffect(() => {
-    searchRooms<roomsIf>(RoomsUrl());
+    searchRooms(RoomsUrl());
   }, []);
 
   return (
