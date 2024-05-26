@@ -15,11 +15,11 @@ import KeyIcon from "@mui/icons-material/Key";
 import { roomsIf } from "src/models/Room.model";
 type Props = {
   listRoomData: roomsIf[] | [];
-};
+}& React.PropsWithChildren;
 
-const ListRooms = ({ listRoomData }: Props) => {
+const ListRooms:React.FC<Props> = (props) => {
   const navigate = useNavigate();
-
+  const { listRoomData } = props;
   const handleNavigate = (idRoom: string) => () => {
     if ((idRoom ?? null) === null) return;
 

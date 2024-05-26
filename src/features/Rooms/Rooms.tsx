@@ -6,8 +6,8 @@ import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
 import ListRooms from "./Components/ListRooms";
 import { debounce } from "@mui/material";
-import useRoomMutetion from "./useMutation";
 import { orderByChild, startAfter } from "firebase/database";
+import useRoomMutetion from "src/hook/useRoomMutetion";
 
 type RoomsProps = object & React.PropsWithChildren;
 

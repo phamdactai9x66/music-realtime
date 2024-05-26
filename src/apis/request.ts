@@ -9,3 +9,7 @@ export const userUrl = (idUser?: string | undefined) => {
 
   return url;
 };
+
+export const RoomsUrl = () => {
+  return "room";
+};
