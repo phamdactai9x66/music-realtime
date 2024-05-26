@@ -23,7 +23,7 @@ export const NAB_ROUTER_PUBLIC = [PATH_ROUTER.ROOT, PATH_ROUTER.LOGIN];
 
 export const NAB_ROUTER_PRIVATE = [PATH_ROUTER.ROOT, PATH_ROUTER.ROOMS];
 
-export const LABEL_PATH = {
+export const LABEL_PATH: looseObj = {
   [PATH_ROUTER.ROOT]: "Home",
   [PATH_ROUTER.LOGIN]: "Login",
   [PATH_ROUTER.ROOMS]: "Rooms",

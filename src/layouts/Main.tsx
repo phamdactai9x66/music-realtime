@@ -23,7 +23,7 @@ import {
   NAB_ROUTER_PRIVATE,
   NAB_ROUTER_PUBLIC,
 } from "src/routers/routers";
-import MusicPlayerSlider from "./MusicPlayerSlider";
+import MusicPlayerSlider from "src/components/ui/MusicPlayerSlider";
 import { useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";

@@ -34,14 +34,7 @@ const ListSongs: React.FC<ListSongsProps> = (props) => {
   return (
     <List className={classes.container}>
       {data.map((data, index) => {
-        const {
-          audio_url,
-          description,
-          image_song,
-          name_authors,
-          name_song,
-          _id,
-        } = data;
+        const { description, image_song, name_authors, name_song, _id } = data;
         return (
           <Box key={_id}>
             <ListItem
