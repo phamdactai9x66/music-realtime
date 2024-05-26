@@ -7,8 +7,7 @@ export type UserType = {
         name?: string;
         picture?: string;
         id?: string;
-      }
-    | looseObj;
+      } & looseObj;
 };
 
 const initialState: UserType = {

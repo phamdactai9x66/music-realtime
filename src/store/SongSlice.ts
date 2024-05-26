@@ -6,7 +6,7 @@ export type songType = {
   image_song: string;
   name_authors: string;
   name_song: string;
-};
+} & looseObj;
 
 const initialState: songType = {
   audio_url: "",

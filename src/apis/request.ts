@@ -9,3 +9,11 @@ export const userUrl = (idUser?: string | undefined) => {
 
   return url;
 };
+
+export const myFavoritesUrl = (idFavorites?: string | undefined) => {
+  let url = "my_favorites";
+
+  idFavorites && (url += `/${idFavorites}`);
+
+  return url;
+};
