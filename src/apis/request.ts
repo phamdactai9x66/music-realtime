@@ -1,5 +1,9 @@
-export const songUrl = () => {
-  return "songs";
+export const songUrl = (idSong?: string | undefined) => {
+  let url = "songs";
+
+  idSong && (url += `/${idSong}`);
+
+  return url;
 };
 
 export const userUrl = (idUser?: string | undefined) => {

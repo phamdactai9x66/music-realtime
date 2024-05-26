@@ -1,4 +1,4 @@
-import { Action, Store } from "@reduxjs/toolkit";
+// import { Action, Store } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
   get,
@@ -25,7 +25,7 @@ const axiosClient = axios.create({
   withCredentials: false,
 });
 
-export const initRequest = (action: Store<unknown, Action>) => {
+export const initRequest = () => {
   // handle request api
   axios.interceptors.request.use(
     function (request) {
@@ -82,7 +82,16 @@ class httpRequest {
 
     const data = await get(queryApi);
 
-    return data.val() || {};
+    let body: unknown = {};
+
+    if (Object.values(data.val()).length) {
+      body = {
+        ...data.val(),
+        _id: data.key,
+      };
+    }
+
+    return body as T;
   }
   getPost(url: string, data?: looseObj, autoGenerateId = true) {
     let newDatRef = ref(this.db(), url);

@@ -94,8 +94,11 @@ const MyFavorites: React.FC<MyFavoritesProps> = () => {
 
       // add song when this song no in list favorites of user
 
+      const { _id, image_song } = currentSong;
+
       const body = {
-        id_song: currentSong._id,
+        id_song: _id,
+        image_song,
         id_user: userDetail.userInfo.id,
       };
 
