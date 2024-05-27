@@ -14,6 +14,7 @@ import httpRequest from "src/service/httpRequest";
 import { myFavoritesUrl, songUrl } from "src/apis/request";
 import { equalTo, orderByChild } from "firebase/database";
 import { songType, triggerSong } from "src/store/SongSlice";
+import { cloneObj } from "src/utils";
 
 const useStyles = makeStyles((theme: Theme) => {
   return {
@@ -25,10 +26,17 @@ const useStyles = makeStyles((theme: Theme) => {
   };
 });
 
+const PAGE_SIZE = 3;
+
 export default function StandardImageList() {
   const classes = useStyles();
 
   const [listFavorites, setListFavorites] = React.useState<looseObj[]>([]);
+
+  const listOriginFavorites = React.useRef<looseObj[]>([]);
+
+  const totalPage = React.useRef<number>(0);
+
   const dispatch = useDispatch();
 
   const userDetail = useSelector(
@@ -41,6 +49,7 @@ export default function StandardImageList() {
   /**
    * call api get list favorites base on user
    */
+
   const handleListFavorites = async () => {
     try {
       const idUser = userDetail.userInfo?.id || "";
@@ -51,7 +60,18 @@ export default function StandardImageList() {
         equalTo(idUser)
       );
 
-      setListFavorites(res);
+      const dataOrigin: looseObj[] = cloneObj(res);
+
+      // get total page size
+      totalPage.current = Math.round(dataOrigin.length / PAGE_SIZE + 0.5);
+
+      // get origin data
+      listOriginFavorites.current = dataOrigin;
+
+      // data initial
+      const data = dataOrigin.slice(0 * PAGE_SIZE, PAGE_SIZE * (0 + 1));
+
+      setListFavorites(data);
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +82,7 @@ export default function StandardImageList() {
    * @param idSong
    * @returns
    */
+
   const onPlayFavorite = (idSong: string) => async () => {
     const getData = (await httpRequest.getOne(songUrl(idSong))) as songType;
 
@@ -72,6 +93,22 @@ export default function StandardImageList() {
   React.useEffect(() => {
     handleListFavorites();
   }, [userDetail.userInfo.id]);
+
+  /**
+   * event trigger when next, back, pick page
+   * @param event
+   * @param page
+   */
+  const onChangePage = (event: React.ChangeEvent<unknown>, page: number) => {
+    const currentPage = page - 1;
+
+    const maxDigits = listOriginFavorites.current.slice(
+      currentPage * PAGE_SIZE,
+      PAGE_SIZE * (currentPage + 1)
+    );
+
+    setListFavorites(maxDigits);
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -96,27 +133,13 @@ export default function StandardImageList() {
       {/* pagination */}
       <Stack spacing={2}>
         <Pagination
-          count={4}
+          count={totalPage.current}
           variant="outlined"
           shape="rounded"
+          onChange={onChangePage}
           sx={{ display: "flex", justifyContent: "flex-end" }}
         />
       </Stack>
     </Box>
   );
 }
-
-const itemData = [
-  {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-  },
-];

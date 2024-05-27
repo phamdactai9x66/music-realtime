@@ -66,3 +66,7 @@ export function protectedLoader({ request }: LoaderFunctionArgs) {
 
   return redirect("/login?" + params.toString());
 }
+
+export function cloneObj(data: looseObj) {
+  return JSON.parse(JSON.stringify(data));
+}
