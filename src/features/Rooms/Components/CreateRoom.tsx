@@ -43,6 +43,10 @@ const CreateRoom: React.FC<Props> = (props: Props) => {
         await httpRequest.getPost(RoomsUrl(), formValue);
 
         setOpen(false);
+
+        setTimeout(() => {
+          props.callBack?.();
+        }, import.meta.env.VITE_TIME_SEARCH);
       } catch (error) {
         console.log(error);
       }
