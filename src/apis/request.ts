@@ -21,3 +21,7 @@ export const myFavoritesUrl = (idFavorites?: string | undefined) => {
 
   return url;
 };
+
+export const RoomsUrl = () => {
+  return "room";
+};
