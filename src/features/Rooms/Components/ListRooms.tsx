@@ -7,17 +7,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 
-import { Box, IconButton } from "@mui/material";
+import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
 
-import KeyIcon from "@mui/icons-material/Key";
-import { roomsIf } from "src/models/Room.model";
 type Props = {
-  listRoomData: roomsIf[] | [];
-}& React.PropsWithChildren;
+  listRoomData: looseObj[] | [];
+} & React.PropsWithChildren;
 
-const ListRooms:React.FC<Props> = (props) => {
+const ListRooms: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const { listRoomData } = props;
   const handleNavigate = (idRoom: string) => () => {
@@ -40,19 +38,15 @@ const ListRooms:React.FC<Props> = (props) => {
     >
       {listRoomData.length > 0 &&
         listRoomData.map((e, index) => {
-          const { _id, nameRoom, users } = e;
-          const currentUser = Object.values(users).map(() => ({
-            _id: e._id,
-            fullName: e.nameRoom,
-            image: e.password,
-          }));
+          const { _id, name_room, users } = e;
+
           return (
             <React.Fragment key={_id}>
               {/* render room */}
               <ListItem alignItems="flex-start" onClick={handleNavigate(_id)}>
                 {/* name room */}
                 <ListItemText
-                  primary={nameRoom}
+                  primary={name_room}
                   secondary={
                     <Box
                       sx={{
@@ -67,18 +61,19 @@ const ListRooms:React.FC<Props> = (props) => {
                       }}
                     >
                       {/* list avatars */}
-                      <AvatarGroup total={currentUser.length}>
-                        {currentUser.map((user) => (
+                      <AvatarGroup total={users?.length}>
+                        {(users || []).map((user: looseObj) => (
                           <Avatar
                             key={user._id}
-                            alt={user.fullName}
-                            src={user.image}
+                            // alt={user.fullName}
+                            // src={user.image}
                           />
                         ))}
                       </AvatarGroup>
-                      <IconButton>
+                      {/* require password */}
+                      {/* <IconButton>
                         <KeyIcon />
-                      </IconButton>
+                      </IconButton> */}
                     </Box>
                   }
                 />
