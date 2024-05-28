@@ -5,15 +5,19 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
 import ListRooms from "./Components/ListRooms";
-import { debounce } from "@mui/material";
+import { Fab, debounce } from "@mui/material";
 import { orderByChild, startAfter } from "firebase/database";
 import { RoomsUrl } from "src/apis/request";
 import httpRequest from "src/service/httpRequest";
+import CreateRoom from "./Components/CreateRoom";
+import AddIcon from "@mui/icons-material/Add";
 
 type RoomsProps = object & React.PropsWithChildren;
 
 const Rooms: React.FC<RoomsProps> = () => {
   const [Rooms, setRooms] = React.useState<looseObj[]>([]);
+
+  const [open, setOpen] = React.useState<boolean>(false);
 
   const handleApiRooms = async (...query: unknown[]) => {
     try {
@@ -62,6 +66,26 @@ const Rooms: React.FC<RoomsProps> = () => {
       </FormControl>
 
       <ListRooms listRoomData={Rooms} />
+
+      <CreateRoom setOpen={setOpen} open={open} callBack={handleApiRooms} />
+
+      <Fab
+        sx={{
+          position: "absolute",
+          bottom: 20,
+          right: "45%",
+          fontSize: "2rem",
+          outline: "none",
+          ":focus": {
+            outline: "none !important",
+          },
+        }}
+        aria-label={"Add"}
+        onClick={() => setOpen(!open)}
+        color={"primary"}
+      >
+        <AddIcon />
+      </Fab>
     </div>
   );
 };
