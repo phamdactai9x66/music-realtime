@@ -18,6 +18,7 @@ type Props = {
 const ListRooms: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const { listRoomData } = props;
+
   const handleNavigate = (idRoom: string) => () => {
     if ((idRoom ?? null) === null) return;
 

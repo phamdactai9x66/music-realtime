@@ -11,10 +11,19 @@ import { RoomsUrl } from "src/apis/request";
 import httpRequest from "src/service/httpRequest";
 import CreateRoom from "./Components/CreateRoom";
 import AddIcon from "@mui/icons-material/Add";
+import { useStreaming } from "src/hook";
 
 type RoomsProps = object & React.PropsWithChildren;
 
 const Rooms: React.FC<RoomsProps> = () => {
+  useStreaming({
+    url: RoomsUrl(),
+    callBack: () => {
+      // snapshot, realtime when data change
+      handleApiRooms();
+    },
+  });
+
   const [Rooms, setRooms] = React.useState<looseObj[]>([]);
 
   const [open, setOpen] = React.useState<boolean>(false);
@@ -44,10 +53,6 @@ const Rooms: React.FC<RoomsProps> = () => {
     },
     import.meta.env.VITE_TIME_SEARCH
   );
-
-  React.useEffect(() => {
-    handleApiRooms();
-  }, []);
 
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
