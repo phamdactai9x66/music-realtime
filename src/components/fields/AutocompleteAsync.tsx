@@ -4,19 +4,20 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import httpRequest from "src/service/httpRequest";
 import { cloneObj } from "src/utils";
-import { songType } from "src/store/SongSlice";
 import SearchIcon from "@mui/icons-material/Search";
 
 type AsynchronousProps = {
   url: string;
   labelOptions: (option: looseObj) => string;
+  onChange?: (data: looseObj) => void;
 } & React.PropsWithChildren;
 
 const AutocompleteAsync: React.FC<AsynchronousProps> = (props) => {
-  const { url, labelOptions } = props || {};
+  const { url, labelOptions, onChange } = props || {};
 
   const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState<readonly songType[]>([]);
+  const [options, setOptions] = React.useState<looseObj[]>([]);
+
   const loading = open && options.length === 0;
 
   const handleApi = async () => {
@@ -32,9 +33,7 @@ const AutocompleteAsync: React.FC<AsynchronousProps> = (props) => {
   React.useEffect(() => {
     let active = true;
 
-    if (!loading) {
-      return undefined;
-    }
+    if (!loading) return undefined;
 
     if (active) handleApi();
 
@@ -44,9 +43,7 @@ const AutocompleteAsync: React.FC<AsynchronousProps> = (props) => {
   }, [loading]);
 
   React.useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
+    if (!open) setOptions([]);
   }, [open]);
 
   return (
@@ -59,11 +56,8 @@ const AutocompleteAsync: React.FC<AsynchronousProps> = (props) => {
       onClose={() => {
         setOpen(false);
       }}
-      onChange={(
-        event: React.SyntheticEvent<Element, Event>,
-        value: songType | null
-      ) => {
-        console.log(value);
+      onChange={(event: React.SyntheticEvent<Element, Event>, value) => {
+        value && onChange?.(value);
       }}
       isOptionEqualToValue={(option, value) => option._id === value._id}
       getOptionLabel={labelOptions}

@@ -22,6 +22,10 @@ export const myFavoritesUrl = (idFavorites?: string | undefined) => {
   return url;
 };
 
-export const RoomsUrl = () => {
-  return "room";
+export const RoomsUrl = (idRoom?: string | undefined) => {
+  let url = "room";
+
+  idRoom && (url += `/${idRoom}`);
+
+  return url;
 };

@@ -108,7 +108,7 @@ class httpRequest {
   getPut(url: string, data: looseObj) {
     const newDatRef = ref(this.db(), url);
 
-    return update(push(newDatRef), data);
+    return update(newDatRef, data);
   }
 }
 
