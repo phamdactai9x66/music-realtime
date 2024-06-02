@@ -15,6 +15,11 @@ const useStreaming = (props: useStreamingProps) => {
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
 
+      // add unique for object
+      if (snapshot.key) {
+        data["_id"] = snapshot.key;
+      }
+
       callBack?.(data);
     });
   }, []);

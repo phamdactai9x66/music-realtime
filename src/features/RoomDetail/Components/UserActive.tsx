@@ -33,24 +33,33 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function BadgeAvatars() {
+type BadgeAvatarsProps = {
+  data?: looseObj[];
+  label?: string;
+  img?: string;
+} & React.PropsWithChildren;
+
+export default function BadgeAvatars(props: BadgeAvatarsProps) {
+  const { data = [], label = "", img = "" } = props || {};
+
   return (
     <Stack direction="row" spacing={2}>
-      <StyledBadge
-        overlap="circular"
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        variant="dot"
-      >
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-      </StyledBadge>
+      {data.map((curr: looseObj) => {
+        const labelItem = curr?.[label] || "";
 
-      <StyledBadge
-        overlap="circular"
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        variant="dot"
-      >
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-      </StyledBadge>
+        const imgItem = curr?.[img] || "";
+
+        return (
+          <StyledBadge
+            overlap="circular"
+            key={curr?._id}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant="dot"
+          >
+            <Avatar alt={labelItem} src={imgItem} />
+          </StyledBadge>
+        );
+      })}
     </Stack>
   );
 }

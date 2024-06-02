@@ -1,16 +1,17 @@
 import * as React from "react";
-import ListRooms from "src/components/ui/ListItems";
+import ListSongs from "src/components/ui/ListItems";
 import UserActive from "./Components/UserActive";
 import { makeStyles } from "@mui/styles";
 import { Box, Stack } from "@mui/material";
 import MenuItems from "src/components/ui/MenuItem";
 
 import AutocompleteAsync from "src/components/fields/AutocompleteAsync";
-import { RoomsUrl, songUrl } from "src/apis/request";
+import { RoomsUrl, songUrl, userUrl } from "src/apis/request";
 import httpRequest from "src/service/httpRequest";
 
 import { useParams } from "react-router-dom";
 import { cloneObj } from "src/utils";
+import { useStreaming } from "src/hook";
 
 const useStyle = makeStyles(() => {
   return {
@@ -18,13 +19,68 @@ const useStyle = makeStyles(() => {
   };
 });
 
+const convertData = (listId: number[], listData: looseObj) => {
+  return listId.map((idItem) => {
+    const dataItem = listData?.[idItem];
+
+    if (dataItem) return dataItem;
+
+    return idItem;
+  });
+};
+
 type RoomsProps = object & React.PropsWithChildren;
+
+type TRoom = {
+  dataUser: looseObj[];
+  dataSong: looseObj[];
+};
 
 const Rooms: React.FC<RoomsProps> = () => {
   const params = useParams();
 
   const classes = useStyle();
 
+  const [dataRoom, setDataRoom] = React.useState<TRoom>({
+    dataUser: [],
+    dataSong: [],
+  });
+
+  useStreaming({
+    url: RoomsUrl(params.idRoom),
+    callBack: async (data) => {
+      try {
+        const { users, songs } = data;
+
+        // get list data room , user
+        const listApi = [
+          httpRequest.getDataObj(userUrl()),
+          httpRequest.getDataObj(songUrl()),
+        ];
+
+        const [userOrigin, songOrigin] = await Promise.all(listApi);
+
+        // covert from id user to info of that user
+        const dataUser = convertData(users, userOrigin);
+
+        // covert from id song to info of that song
+        const dataSong = convertData(songs, songOrigin);
+
+        setDataRoom({
+          dataUser,
+          dataSong,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+
+  /**
+   * add or remove song
+   * @param data
+   * @returns
+   */
   const onChangeSong = async (data: looseObj) => {
     try {
       const idSong = data._id;
@@ -56,7 +112,7 @@ const Rooms: React.FC<RoomsProps> = () => {
   return (
     <div className={classes.container}>
       <Stack flexDirection={"row"} justifyContent={"space-between"}>
-        <UserActive />
+        <UserActive data={dataRoom.dataUser} label={"name"} img={"picture"} />
         <MenuItems />
       </Stack>
 
@@ -68,7 +124,7 @@ const Rooms: React.FC<RoomsProps> = () => {
         onChange={onChangeSong}
       />
 
-      <ListRooms />
+      <ListSongs data={dataRoom.dataSong} />
     </div>
   );
 };

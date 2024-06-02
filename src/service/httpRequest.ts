@@ -76,7 +76,28 @@ class httpRequest {
     return mapKey;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getDataObj<T = looseObj>(url: string, ...rest: any): Promise<T> {
+    const queryApi = query(ref(this.db(), url), ...rest);
+
+    const data = await get(queryApi);
+
+    const convertData = Object.entries(data.val() || []) as T[][];
+
+    const mapKey = convertData.reduce((pre, cur) => {
+      const [_id, values] = cur as any[];
+
+      return {
+        ...pre,
+        [_id]: {
+          ...values,
+          _id,
+        },
+      };
+    }, {}) as T;
+
+    return mapKey;
+  }
+
   async getOne<T = looseObj>(url: string): Promise<T> {
     const queryApi = ref(this.db(), url);
 
