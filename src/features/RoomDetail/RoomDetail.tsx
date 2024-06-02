@@ -9,9 +9,10 @@ import AutocompleteAsync from "src/components/fields/AutocompleteAsync";
 import { RoomsUrl, songUrl, userUrl } from "src/apis/request";
 import httpRequest from "src/service/httpRequest";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { cloneObj } from "src/utils";
 import { useStreaming } from "src/hook";
+import { PATH_ROUTER } from "src/routers/routers";
 
 const useStyle = makeStyles(() => {
   return {
@@ -40,6 +41,8 @@ const Rooms: React.FC<RoomsProps> = () => {
   const params = useParams();
 
   const classes = useStyle();
+
+  const navigate = useNavigate();
 
   const [dataRoom, setDataRoom] = React.useState<TRoom>({
     dataUser: [],
@@ -75,6 +78,19 @@ const Rooms: React.FC<RoomsProps> = () => {
       }
     },
   });
+
+  // list action for menu
+  const actionsMenu = React.useMemo(() => {
+    return [
+      {
+        label: "Back",
+        value: "back",
+        onChange: () => {
+          navigate(PATH_ROUTER.ROOMS);
+        },
+      },
+    ];
+  }, []);
 
   /**
    * add or remove song
@@ -113,7 +129,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     <div className={classes.container}>
       <Stack flexDirection={"row"} justifyContent={"space-between"}>
         <UserActive data={dataRoom.dataUser} label={"name"} img={"picture"} />
-        <MenuItems />
+        <MenuItems options={actionsMenu} />
       </Stack>
 
       <Box sx={{ m: 1 }}></Box>

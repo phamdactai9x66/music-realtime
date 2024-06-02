@@ -4,18 +4,27 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const options = ["back"];
-
 const ITEM_HEIGHT = 48;
 
-export default function MenuItems() {
+type MenuItemsProps = {
+  options: { label: string; value: string; onChange: () => void }[];
+} & React.PropsWithChildren;
+
+export default function MenuItems(props: MenuItemsProps) {
+  const { options = [] } = props;
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleClose = (cb: () => void) => () => {
     setAnchorEl(null);
+
+    cb?.();
   };
 
   return (
@@ -30,6 +39,7 @@ export default function MenuItems() {
       >
         <MoreVertIcon />
       </IconButton>
+
       <Menu
         id="long-menu"
         MenuListProps={{
@@ -45,15 +55,15 @@ export default function MenuItems() {
           },
         }}
       >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === "Pyxis"}
-            onClick={handleClose}
-          >
-            {option}
-          </MenuItem>
-        ))}
+        {options.map((option) => {
+          const { value, label, onChange } = option;
+
+          return (
+            <MenuItem key={value} onClick={handleClose(onChange)}>
+              {label}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </div>
   );
