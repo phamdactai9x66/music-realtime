@@ -4,7 +4,9 @@ import {
   matchRoutes,
   redirect,
 } from "react-router-dom";
+import { RoomsUrl } from "src/apis/request";
 import { PATH_ROUTER } from "src/routers/routers";
+import httpRequest from "src/service/httpRequest";
 
 export const formatData = () => {};
 
@@ -67,6 +69,52 @@ export function protectedLoader({ request }: LoaderFunctionArgs) {
   return redirect("/login?" + params.toString());
 }
 
+/**
+ * clone Obj
+ * @param data
+ * @returns
+ */
+
 export function cloneObj(data: looseObj) {
   return JSON.parse(JSON.stringify(data));
+}
+
+/**
+ * add or remove user in room
+ * @param data
+ * @returns
+ */
+
+export async function addOrRemoveUser(
+  data: { idUser?: string; idRoom?: string },
+  type: "ADD" | "REMOVE"
+) {
+  try {
+    const { idUser, idRoom } = data;
+
+    // don't trigger function when user id room no exist
+    if (!idRoom || !idUser) return;
+
+    const dataRoom = await httpRequest.getOne(RoomsUrl(idRoom));
+
+    let users = cloneObj(dataRoom?.users || []) as string[];
+
+    // add if song unExist in list
+    if (type == "ADD" && !users.includes(idUser)) {
+      users.push(idUser);
+    }
+
+    // add if song unExist in list
+    if (type == "REMOVE" && users.includes(idUser)) {
+      users = users.filter((id) => id != idUser);
+    }
+
+    const body = {
+      users,
+    };
+
+    await httpRequest.getPut(RoomsUrl(idRoom), body);
+  } catch (error) {
+    console.log(error);
+  }
 }

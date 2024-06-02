@@ -10,9 +10,12 @@ import { RoomsUrl, songUrl, userUrl } from "src/apis/request";
 import httpRequest from "src/service/httpRequest";
 
 import { useNavigate, useParams } from "react-router-dom";
-import { cloneObj } from "src/utils";
+import { addOrRemoveUser, cloneObj } from "src/utils";
 import { useStreaming } from "src/hook";
 import { PATH_ROUTER } from "src/routers/routers";
+import { useSelector } from "react-redux";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import { UserType } from "src/store/UserSlice";
 
 const useStyle = makeStyles(() => {
   return {
@@ -38,6 +41,10 @@ type TRoom = {
 };
 
 const Rooms: React.FC<RoomsProps> = () => {
+  const userDetail = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+  );
+
   const params = useParams();
 
   const classes = useStyle();
@@ -53,7 +60,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     url: RoomsUrl(params.idRoom),
     callBack: async (data) => {
       try {
-        const { users, songs } = data;
+        const { users = [], songs = [] } = data;
 
         // get list data room , user
         const listApi = [
@@ -85,8 +92,16 @@ const Rooms: React.FC<RoomsProps> = () => {
       {
         label: "Back",
         value: "back",
-        onChange: () => {
-          navigate(PATH_ROUTER.ROOMS);
+        onChange: async () => {
+          try {
+            const idUser = userDetail.userInfo?.id;
+
+            addOrRemoveUser({ idRoom: params.idRoom, idUser }, "REMOVE");
+
+            navigate(PATH_ROUTER.ROOMS);
+          } catch (error) {
+            console.log(error);
+          }
         },
       },
     ];

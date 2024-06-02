@@ -105,7 +105,7 @@ class httpRequest {
 
     let body: unknown = {};
 
-    if (Object.values(data.val()).length) {
+    if (Object.values(data?.val() || {}).length) {
       body = {
         ...data.val(),
         _id: data.key,

@@ -48,7 +48,8 @@ const Login: React.FC<LoginProps> = () => {
 
         const isNoLogged = Object.values(dataResponse).length;
 
-        if (isNoLogged) {
+        // if user don't have info in db, Fe call API to create them
+        if (!isNoLogged) {
           await httpRequest.getPost(userUrl(userinfo.id), userinfo, false);
         }
 
@@ -82,7 +83,6 @@ const Login: React.FC<LoginProps> = () => {
 
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
 
         // IdP data available using getAdditionalUserInfo(result)
         // ...

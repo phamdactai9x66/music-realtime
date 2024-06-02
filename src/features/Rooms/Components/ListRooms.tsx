@@ -10,19 +10,41 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
+import { useSelector } from "react-redux";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import { UserType } from "src/store/UserSlice";
+
+import { addOrRemoveUser } from "src/utils";
 
 type Props = {
   listRoomData: looseObj[] | [];
 } & React.PropsWithChildren;
 
 const ListRooms: React.FC<Props> = (props) => {
+  const userDetail = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+  );
+
   const navigate = useNavigate();
+
   const { listRoomData } = props;
 
-  const handleNavigate = (idRoom: string) => () => {
-    if ((idRoom ?? null) === null) return;
+  /**
+   * navigate to room detail
+   * @param idRoom
+   * @returns
+   */
 
-    navigate(`${PATH_ROUTER.ROOMS}/${idRoom}`);
+  const handleNavigate = (idRoom: string) => async () => {
+    try {
+      const idUser = userDetail.userInfo?.id;
+
+      addOrRemoveUser({ idRoom, idUser }, "ADD");
+
+      navigate(`${PATH_ROUTER.ROOMS}/${idRoom}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -64,11 +86,7 @@ const ListRooms: React.FC<Props> = (props) => {
                       {/* list avatars */}
                       <AvatarGroup total={users?.length}>
                         {(users || []).map((user: looseObj) => (
-                          <Avatar
-                            key={user._id}
-                            // alt={user.fullName}
-                            // src={user.image}
-                          />
+                          <Avatar key={user._id} />
                         ))}
                       </AvatarGroup>
                       {/* require password */}
