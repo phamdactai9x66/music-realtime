@@ -13,9 +13,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { addOrRemoveUser, cloneObj } from "src/utils";
 import { useStreaming } from "src/hook";
 import { PATH_ROUTER } from "src/routers/routers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
+import { songType, triggerSong } from "src/store/SongSlice";
 
 const useStyle = makeStyles(() => {
   return {
@@ -44,6 +45,8 @@ const Rooms: React.FC<RoomsProps> = () => {
   const userDetail = useSelector(
     (state: RootState) => state[TYPE_REDUCER.USER] as UserType
   );
+
+  const dispatch = useDispatch();
 
   const params = useParams();
 
@@ -80,6 +83,14 @@ const Rooms: React.FC<RoomsProps> = () => {
           dataUser,
           dataSong,
         });
+
+        // trigger song realtime
+
+        if (data.status) {
+          const objSong = songOrigin[data.currentSong];
+
+          objSong && dispatch(triggerSong(objSong));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -140,6 +151,27 @@ const Rooms: React.FC<RoomsProps> = () => {
     }
   };
 
+  /**
+   * play or pause song
+   */
+
+  const onPlaySong = async (data: songType) => {
+    try {
+      const idSong = data?._id;
+
+      if (!idSong) return "";
+
+      const body = {
+        currentSong: idSong,
+        status: true,
+      };
+
+      await httpRequest.getPut(RoomsUrl(params.idRoom), body);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={classes.container}>
       <Stack flexDirection={"row"} justifyContent={"space-between"}>
@@ -155,7 +187,7 @@ const Rooms: React.FC<RoomsProps> = () => {
         onChange={onChangeSong}
       />
 
-      <ListSongs data={dataRoom.dataSong} />
+      <ListSongs data={dataRoom.dataSong} onClick={onPlaySong} />
     </div>
   );
 };
