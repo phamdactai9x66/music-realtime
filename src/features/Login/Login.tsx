@@ -103,13 +103,13 @@ const Login: React.FC<LoginProps> = () => {
   return (
     <div className={classes.containerBox}>
       <Stack direction="row" spacing={2} justifyContent="space-evenly">
-        <Button
+        {/* <Button
           variant="outlined"
           startIcon={<FacebookIcon />}
           onClick={onLoginFaceBook}
         >
           Facebook
-        </Button>
+        </Button> */}
         <Button
           variant="outlined"
           startIcon={<GoogleIcon />}
