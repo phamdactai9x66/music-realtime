@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { songType } from "src/store/SongSlice";
 import MyFavorites from "./Components/MyFavorites";
+import { LIST_EVENT, publish } from "src/service/event";
 
 const useStyle = makeStyles((theme: Theme) => {
   return {
@@ -113,13 +114,22 @@ export default function MusicPlayerSlider() {
   const togglePlayPause = () => {
     if (!audioPlayer.current) return;
 
-    const prevValue = isPlaying;
+    setIsPlaying((isPlaying) => {
+      const changeStatus = !isPlaying;
 
-    setIsPlaying(!prevValue);
+      // update status song
+      changeStatus
+        ? audioPlayer.current?.play?.()
+        : audioPlayer.current?.pause?.();
 
-    if (!prevValue) return audioPlayer.current.play();
+      // register event status song
+      publish(LIST_EVENT.CURRENT_SONG, {
+        status: changeStatus,
+        objSong: currentSong,
+      });
 
-    audioPlayer.current.pause();
+      return changeStatus;
+    });
   };
 
   return (

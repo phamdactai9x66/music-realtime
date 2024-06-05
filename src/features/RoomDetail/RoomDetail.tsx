@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
 import { songType, triggerSong } from "src/store/SongSlice";
+import { LIST_EVENT, subscribe, unsubscribe } from "src/service/event";
 
 const useStyle = makeStyles(() => {
   return {
@@ -96,6 +97,19 @@ const Rooms: React.FC<RoomsProps> = () => {
       }
     },
   });
+
+  React.useEffect(() => {
+    const cb = (data: looseObj) => {
+      // realtime update song in here
+      console.log(data.detail);
+    };
+
+    subscribe(LIST_EVENT.CURRENT_SONG, cb);
+
+    return () => {
+      unsubscribe(LIST_EVENT.CURRENT_SONG, cb);
+    };
+  }, []);
 
   // list action for menu
   const actionsMenu = React.useMemo(() => {
