@@ -47,9 +47,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     (state: RootState) => state[TYPE_REDUCER.USER] as UserType
   );
 
-  const currentSong = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.SONG] as songType
-  );
+  const dicSong = React.useRef<looseObj>({});
 
   const dispatch = useDispatch();
 
@@ -68,7 +66,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     url: RoomsUrl(params.idRoom),
     callBack: async (data) => {
       try {
-        const { users = [], songs = [] } = data;
+        const { users = [], songs = [], currentSong } = data;
 
         // get list data room , user
         const listApi = [
@@ -89,12 +87,19 @@ const Rooms: React.FC<RoomsProps> = () => {
           dataSong,
         });
 
-        // trigger song realtime
+        // set song when song local and song ob DB is diff
+        if (dicSong.current?._id != currentSong && data.status) {
+          const objSong = songOrigin[currentSong];
 
-        if (currentSong._id != currentSong && data.status) {
-          const objSong = songOrigin[data.currentSong];
+          dicSong.current = objSong;
 
           return objSong && dispatch(triggerSong(objSong));
+        }
+
+        // if current song local match with song in db
+        if (dicSong.current._id == currentSong) {
+          // play and pause song realtime
+          window.callbackFn?.(data.status);
         }
       } catch (error) {
         console.log(error);

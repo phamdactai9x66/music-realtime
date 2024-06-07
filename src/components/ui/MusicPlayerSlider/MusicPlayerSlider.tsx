@@ -90,6 +90,9 @@ export default function MusicPlayerSlider() {
 
       return setIsPlaying(true);
     }
+
+    window.callbackFn = togglePlayPauseGlobal;
+
     return () => {
       // trigger when switching song
 
@@ -102,12 +105,25 @@ export default function MusicPlayerSlider() {
     };
   }, [currentSong.audio_url]);
 
-  if (!currentSong.audio_url) return;
-
   const mainIconColor = theme.palette.mode === "dark" ? "#fff" : "#000";
 
   /**
-   * toggle play or pause for song
+   * toggle play or pause for song global
+   * @returns
+   */
+
+  const togglePlayPauseGlobal = (currentStatus?: boolean) => {
+    if (!audioPlayer.current || currentStatus == null) return;
+
+    currentStatus
+      ? audioPlayer.current?.play?.()
+      : audioPlayer.current?.pause?.();
+
+    setIsPlaying(currentStatus);
+  };
+
+  /**
+   * toggle play or pause for song local
    * @returns
    */
 
@@ -131,6 +147,8 @@ export default function MusicPlayerSlider() {
       return changeStatus;
     });
   };
+
+  if (!currentSong.audio_url) return;
 
   return (
     <Box
