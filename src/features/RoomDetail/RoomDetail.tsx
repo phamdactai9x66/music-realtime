@@ -47,6 +47,10 @@ const Rooms: React.FC<RoomsProps> = () => {
     (state: RootState) => state[TYPE_REDUCER.USER] as UserType
   );
 
+  const currentSong = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.SONG] as songType
+  );
+
   const dispatch = useDispatch();
 
   const params = useParams();
@@ -87,10 +91,10 @@ const Rooms: React.FC<RoomsProps> = () => {
 
         // trigger song realtime
 
-        if (data.status) {
+        if (currentSong._id != currentSong && data.status) {
           const objSong = songOrigin[data.currentSong];
 
-          objSong && dispatch(triggerSong(objSong));
+          return objSong && dispatch(triggerSong(objSong));
         }
       } catch (error) {
         console.log(error);
@@ -99,9 +103,21 @@ const Rooms: React.FC<RoomsProps> = () => {
   });
 
   React.useEffect(() => {
-    const cb = (data: looseObj) => {
+    const cb = async (data: looseObj) => {
       // realtime update song in here
-      console.log(data.detail);
+
+      try {
+        const {
+          status,
+          objSong: { _id: IdSong },
+        } = data.detail;
+
+        const body = { currentSong: IdSong, status };
+
+        await httpRequest.getPut(RoomsUrl(params.idRoom), body);
+      } catch (error) {
+        console.log();
+      }
     };
 
     subscribe(LIST_EVENT.CURRENT_SONG, cb);

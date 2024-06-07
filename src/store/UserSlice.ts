@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice, current } from "@reduxjs/toolkit";
 
 export type UserType = {
   isLogin: boolean;
@@ -11,8 +11,19 @@ export type UserType = {
 };
 
 const initialState: UserType = {
-  isLogin: false,
-  userInfo: {},
+  isLogin: true,
+  userInfo: {
+    email: "tai15122003311@gmail.com",
+    family_name: "pham",
+    given_name: "tai",
+    granted_scopes:
+      "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid",
+    id: "113294946135490343075",
+    name: "tai pham",
+    picture:
+      "https://lh3.googleusercontent.com/a/ACg8ocKAqfYjSOH_t-RROQcYEriZi2BmYqPe_S6g7vx-utu8DJPVuw=s96-c",
+    verified_email: true,
+  },
 };
 
 export const counterSlice = createSlice({
@@ -21,6 +32,8 @@ export const counterSlice = createSlice({
   reducers: {
     loginUser: (state, actions: PayloadAction<UserType>) => {
       const { payload } = actions;
+
+      console.log(current(state));
 
       if (!payload) return;
 
