@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { styled, useTheme, CSSObject, Theme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -27,6 +27,8 @@ import MusicPlayerSlider from "src/components/ui/MusicPlayerSlider";
 import { useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
+import { makeStyles } from "@mui/styles";
+import { Avatar } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -46,9 +48,6 @@ const closedMixin = (theme: Theme): CSSObject => ({
   }),
   overflowX: "hidden",
   width: 0,
-  // [theme.breakpoints.up("sm")]: {
-  //   width: `calc(${theme.spacing(8)} + 1px)`,
-  // },
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -59,6 +58,17 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
+
+const useStyles = makeStyles((theme: Theme) => {
+  return {
+    topBar: {
+      display: "flex",
+      flexDirection: "row !important",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+  };
+});
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -101,9 +111,14 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer() {
   const theme = useTheme();
+
   const [open, setOpen] = React.useState(false);
+
   const location = useLocation();
+
   const navigate = useNavigate();
+
+  const classes = useStyles();
 
   const currentUser = useSelector(
     (state: RootState) => state[TYPE_REDUCER.USER] as UserType
@@ -122,14 +137,40 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  /**
+   * function control navigate page
+   * @param path
+   * @returns
+   */
   const handleNavigation = (path: string) => () => {
     navigate(path);
   };
 
+  /**
+   * display avatar when user logged
+   * @returns
+   */
+  const renderAvatar = () => {
+    const {
+      isLogin,
+      userInfo: { picture, name },
+    } = currentUser || {};
+
+    // display null when user not logged
+    if (!isLogin) return "";
+
+    return (
+      <Typography component="div" padding={2}>
+        <Avatar alt={name || ""} src={picture} />
+      </Typography>
+    );
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} className={classes.topBar}>
         <Toolbar>
+          {/* icon to open or close menu */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -142,11 +183,16 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
+
+          {/* display current page */}
           <Typography variant="h6" noWrap component="div">
             {LABEL_PATH[location.pathname]}
           </Typography>
         </Toolbar>
+
+        {renderAvatar()}
       </AppBar>
+
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
