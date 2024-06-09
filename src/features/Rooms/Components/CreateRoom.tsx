@@ -33,11 +33,9 @@ const CreateRoom: React.FC<Props> = (props: Props) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const key = user.userInfo?.id as string;
-
         const formValue = {
           ...values,
-          users: [key],
+          users: [],
           songs: [],
         };
 
