@@ -1,5 +1,4 @@
 import * as React from "react";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 import Stack from "@mui/material/Stack";
 
@@ -9,15 +8,15 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  FacebookAuthProvider,
   getAdditionalUserInfo,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
-import { UserType, loginUser } from "src/store/UserSlice";
+import { IUserInfo, loginUser } from "src/store/UserSlice";
 import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
 import httpRequest from "src/service/httpRequest";
 import { userUrl } from "src/apis/request";
+import { LIST_EVENT, publish } from "src/service/event";
 
 type LoginProps = object & React.PropsWithChildren;
 
@@ -54,62 +53,43 @@ const Login: React.FC<LoginProps> = () => {
         }
 
         // if user is new User user data Default, if logged user data detail
-        const userResponse = (isNoLogged ? userinfo : dataResponse) as UserType;
+        const userResponse = (
+          isNoLogged ? userinfo : dataResponse
+        ) as IUserInfo;
 
+        // save info user in to redux
         dispatch(loginUser(userResponse));
 
+        // message Welcome user login project
+        const messageAlert = `Welcome ${
+          userResponse?.name?.toUpperCase() || "--"
+        } to Web Music!!`;
+
+        // feedback alert for user after login success
+        publish(LIST_EVENT.SNACKBAR, {
+          display: true,
+          severity: "success",
+          message: messageAlert,
+        });
+
+        // navigate to home screen
         navigate(PATH_ROUTER.ROOT);
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
-  };
 
-  const onLoginFaceBook = () => {
-    const provider = new FacebookAuthProvider();
-
-    const auth = getAuth();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // The signed-in user info.
-        const user = result.user;
-
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = FacebookAuthProvider.credentialFromError(error);
-
-        // ...
+        // feedback alert for user after login unsuccess
+        publish(LIST_EVENT.SNACKBAR, {
+          display: true,
+          severity: "error",
+          message: errorMessage,
+        });
       });
   };
 
   return (
     <div className={classes.containerBox}>
       <Stack direction="row" spacing={2} justifyContent="space-evenly">
-        {/* <Button
-          variant="outlined"
-          startIcon={<FacebookIcon />}
-          onClick={onLoginFaceBook}
-        >
-          Facebook
-        </Button> */}
         <Button
           variant="outlined"
           startIcon={<GoogleIcon />}

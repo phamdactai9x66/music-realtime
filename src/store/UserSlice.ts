@@ -1,13 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
+export type IUserInfo =
+  | {
+      name?: string;
+      picture?: string;
+      id?: string;
+    } & looseObj;
+
 export type UserType = {
   isLogin: boolean;
-  userInfo:
-    | {
-        name?: string;
-        picture?: string;
-        id?: string;
-      } & looseObj;
+  userInfo: IUserInfo;
 };
 
 // fake user
@@ -36,7 +38,7 @@ export const counterSlice = createSlice({
   name: "APP/COUNTER",
   initialState,
   reducers: {
-    loginUser: (state, actions: PayloadAction<UserType>) => {
+    loginUser: (state, actions: PayloadAction<IUserInfo>) => {
       const { payload } = actions;
 
       if (!payload) return;

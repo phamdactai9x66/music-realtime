@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RoomsUrl } from "src/apis/request";
+import { LIST_EVENT, publish } from "src/service/event";
 import httpRequest from "src/service/httpRequest";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
@@ -44,11 +45,21 @@ const CreateRoom: React.FC<Props> = (props: Props) => {
 
         setOpen(false);
 
-        setTimeout(() => {
-          props.callBack?.();
-        }, import.meta.env.VITE_TIME_SEARCH);
+        // feedback alert for user after create room success
+        publish(LIST_EVENT.SNACKBAR, {
+          display: true,
+          severity: "success",
+          message: "Create Room Successfully",
+        });
+
+        props.callBack?.();
       } catch (error) {
-        console.log(error);
+        // feedback alert for user after create room success
+        publish(LIST_EVENT.SNACKBAR, {
+          display: true,
+          severity: "success",
+          message: "Create Room Unsuccessfully",
+        });
       }
     },
   });
