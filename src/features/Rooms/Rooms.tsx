@@ -9,9 +9,10 @@ import { Fab, debounce } from "@mui/material";
 import { orderByChild, startAfter } from "firebase/database";
 import { RoomsUrl } from "src/apis/request";
 import httpRequest from "src/service/httpRequest";
-import CreateRoom from "./Components/CreateRoom";
 import AddIcon from "@mui/icons-material/Add";
 import { useStreaming } from "src/hook";
+import { LIST_EVENT, publish } from "src/service/event";
+import FormCreateRoom from "src/components/ui/FormCreateRoom";
 
 type RoomsProps = object & React.PropsWithChildren;
 
@@ -25,8 +26,6 @@ const Rooms: React.FC<RoomsProps> = () => {
   });
 
   const [Rooms, setRooms] = React.useState<looseObj[]>([]);
-
-  const [open, setOpen] = React.useState<boolean>(false);
 
   const handleApiRooms = async (...query: unknown[]) => {
     try {
@@ -54,6 +53,16 @@ const Rooms: React.FC<RoomsProps> = () => {
     import.meta.env.VITE_TIME_SEARCH
   );
 
+  /**
+   * handle create room
+   */
+  const handleModalCreateForm = () => {
+    publish(LIST_EVENT.MODAL_GLOBAL, {
+      Component: FormCreateRoom,
+      ComponentProps: {},
+    });
+  };
+
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       <FormControl fullWidth sx={{ m: 1 }}>
@@ -72,8 +81,6 @@ const Rooms: React.FC<RoomsProps> = () => {
 
       <ListRooms listRoomData={Rooms} />
 
-      <CreateRoom setOpen={setOpen} open={open} callBack={handleApiRooms} />
-
       <Fab
         sx={{
           position: "absolute",
@@ -86,7 +93,7 @@ const Rooms: React.FC<RoomsProps> = () => {
           },
         }}
         aria-label={"Add"}
-        onClick={() => setOpen(!open)}
+        onClick={handleModalCreateForm}
         color={"primary"}
       >
         <AddIcon />
