@@ -7,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import AvatarGroup from "@mui/material/AvatarGroup";
 
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { PATH_ROUTER } from "src/routers/routers";
 import { useSelector } from "react-redux";
@@ -15,6 +15,8 @@ import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
 
 import { addOrRemoveUser } from "src/utils";
+
+import KeyIcon from "@mui/icons-material/Key";
 
 type Props = {
   listRoomData: looseObj[] | [];
@@ -61,7 +63,7 @@ const ListRooms: React.FC<Props> = (props) => {
     >
       {listRoomData.length > 0 &&
         listRoomData.map((e, index) => {
-          const { _id, name_room, users } = e;
+          const { _id, name_room, users, allowPassword } = e;
 
           return (
             <React.Fragment key={_id}>
@@ -90,9 +92,11 @@ const ListRooms: React.FC<Props> = (props) => {
                         ))}
                       </AvatarGroup>
                       {/* require password */}
-                      {/* <IconButton>
-                        <KeyIcon />
-                      </IconButton> */}
+                      {allowPassword && (
+                        <IconButton>
+                          <KeyIcon />
+                        </IconButton>
+                      )}
                     </Box>
                   }
                 />

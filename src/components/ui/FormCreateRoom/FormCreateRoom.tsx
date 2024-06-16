@@ -1,4 +1,14 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  TextField,
+  Typography,
+  Checkbox as CheckBox,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
 import { RoomsUrl } from "src/apis/request";
@@ -13,23 +23,31 @@ type Props = {
   callBack: () => void;
 } & React.PropsWithChildren;
 
+const initialValues = {
+  name_room: "",
+  allowPassword: false,
+  password: "",
+};
+
 const CreateRoom: React.FC<Props> = (props) => {
   const { callBack } = props;
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
   const formik = useFormik({
-    initialValues: {
-      name_room: "",
-    },
-    validationSchema: validationSchema,
+    initialValues,
+    validationSchema,
     onSubmit: async (values) => {
       try {
-        const formValue = {
-          ...values,
-          users: [],
-          songs: [],
-        };
-
-        await httpRequest.getPost(RoomsUrl(), formValue);
+        await httpRequest.getPost(RoomsUrl(), values);
 
         // feedback alert for user after create room success
         publish(LIST_EVENT.SNACKBAR, {
@@ -50,6 +68,16 @@ const CreateRoom: React.FC<Props> = (props) => {
     },
   });
 
+  const {
+    values,
+    handleChange,
+    setFieldValue,
+    handleBlur,
+    touched,
+    errors,
+    handleSubmit,
+  } = formik;
+
   return (
     <React.Fragment>
       <Typography
@@ -61,20 +89,61 @@ const CreateRoom: React.FC<Props> = (props) => {
         Create Room
       </Typography>
 
-      <form action="" onSubmit={formik.handleSubmit}>
+      <form action="" onSubmit={handleSubmit}>
         <TextField
           fullWidth
           label="Name Room"
-          id="name_room"
           name="name_room"
-          placeholder="Enter room name"
-          value={formik.values.name_room}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.name_room && Boolean(formik.errors.name_room)}
-          helperText={formik.touched.name_room && formik.errors.name_room}
-          sx={{ marginBottom: 2 }}
+          value={values.name_room}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.name_room && Boolean(errors.name_room)}
+          helperText={touched.name_room && errors.name_room}
         />
+
+        <FormControlLabel
+          control={
+            <CheckBox
+              checked={values.allowPassword}
+              name="allowPassword"
+              onChange={(event, checked) => {
+                setFieldValue("allowPassword", checked);
+              }}
+            />
+          }
+          label="allow password"
+        />
+
+        {/* only show when allow password is enable */}
+        {values.allowPassword && (
+          <TextField
+            fullWidth
+            label="Password"
+            name="password"
+            type={!showPassword ? "password" : "text"}
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            error={touched.password && Boolean(errors.password)}
+            helperText={touched.password && errors.password}
+          />
+        )}
+
+        <Box sx={{ marginBottom: 2 }}></Box>
 
         <Button
           color="primary"
@@ -96,6 +165,9 @@ const CreateRoom: React.FC<Props> = (props) => {
 
 const validationSchema = yup.object({
   name_room: yup.string().required("Name Room is required"),
+  password: yup.string().when("allowPassword", ([allowPassword], schema) => {
+    return allowPassword ? schema.required("Password is required") : schema;
+  }),
 });
 
 export default CreateRoom;
