@@ -22,16 +22,31 @@ type Props = {
 } & looseObj &
   React.PropsWithChildren;
 
+enum TYPE_FIELD {
+  verify_password = "verify_password",
+  new_password = "new_password",
+}
+
 const initialValues = {
-  password: "",
+  verify_password: "",
+  new_password: "",
 };
 
-const VerifyPassword: React.FC<Props> = (props) => {
+const ChangePassword: React.FC<Props> = (props) => {
   const { callBack, idRoom } = props;
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showType, setShowType] = React.useState({
+    verify_password: false,
+    new_password: false,
+  });
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = (key: TYPE_FIELD) => () =>
+    setShowType((fields) => {
+      return {
+        ...fields,
+        [key]: !fields[key],
+      };
+    });
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -48,7 +63,7 @@ const VerifyPassword: React.FC<Props> = (props) => {
 
         const dataRes = await httpRequest.getOne(RoomsUrl(idRoom));
 
-        if (dataRes.password == values.password) {
+        if (dataRes.password == values.new_password) {
           publish(LIST_EVENT.MODAL_GLOBAL, {
             Component: null,
             ComponentProps: {},
@@ -79,16 +94,16 @@ const VerifyPassword: React.FC<Props> = (props) => {
         variant="h5"
         component="h2"
       >
-        Verify Password
+        Change Password
       </Typography>
 
       <form action="" onSubmit={handleSubmit}>
         <TextField
           fullWidth
-          label="Password"
-          name="password"
-          type={!showPassword ? "password" : "text"}
-          value={values.password}
+          label="Verify Password"
+          name="verify_password"
+          type={!showType["verify_password"] ? "password" : "text"}
+          value={values.verify_password}
           onChange={handleChange}
           onBlur={handleBlur}
           InputProps={{
@@ -96,17 +111,51 @@ const VerifyPassword: React.FC<Props> = (props) => {
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
+                  onClick={handleClickShowPassword(TYPE_FIELD.verify_password)}
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showType["verify_password"] ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
                 </IconButton>
               </InputAdornment>
             ),
           }}
-          error={touched.password && Boolean(errors.password)}
-          helperText={touched.password && errors.password}
+          error={touched.verify_password && Boolean(errors.verify_password)}
+          helperText={touched.verify_password && errors.verify_password}
+        />
+        <Box sx={{ marginBottom: 2 }}></Box>
+        <TextField
+          fullWidth
+          label="New Password"
+          name="new_password"
+          type={!showType["new_password"] ? "password" : "text"}
+          value={values.new_password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword(TYPE_FIELD.new_password)}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showType["new_password"] ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          error={touched.new_password && Boolean(errors.new_password)}
+          helperText={touched.new_password && errors.new_password}
         />
 
         <Box sx={{ marginBottom: 2 }}></Box>
@@ -133,4 +182,4 @@ const validationSchema = yup.object({
   password: yup.string().required("Password is required"),
 });
 
-export default VerifyPassword;
+export default ChangePassword;

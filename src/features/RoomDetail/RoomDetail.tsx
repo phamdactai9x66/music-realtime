@@ -17,7 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
 import { songType, triggerSong } from "src/store/SongSlice";
-import { LIST_EVENT, subscribe, unsubscribe } from "src/service/event";
+import { LIST_EVENT, publish, subscribe, unsubscribe } from "src/service/event";
+import ChangePassword from "./Components/ChangePassword";
 
 const useStyle = makeStyles(() => {
   return {
@@ -40,6 +41,7 @@ type RoomsProps = object & React.PropsWithChildren;
 type TRoom = {
   dataUser: looseObj[];
   dataSong: looseObj[];
+  roomDetail: looseObj;
 };
 
 const Rooms: React.FC<RoomsProps> = () => {
@@ -60,6 +62,7 @@ const Rooms: React.FC<RoomsProps> = () => {
   const [dataRoom, setDataRoom] = React.useState<TRoom>({
     dataUser: [],
     dataSong: [],
+    roomDetail: {},
   });
 
   useStreaming({
@@ -85,6 +88,7 @@ const Rooms: React.FC<RoomsProps> = () => {
         setDataRoom({
           dataUser,
           dataSong,
+          roomDetail: data,
         });
 
         // set song when song local and song ob DB is diff
@@ -134,7 +138,7 @@ const Rooms: React.FC<RoomsProps> = () => {
 
   // list action for menu
   const actionsMenu = React.useMemo(() => {
-    return [
+    let listAction = [
       {
         label: "Back",
         value: "back",
@@ -151,7 +155,32 @@ const Rooms: React.FC<RoomsProps> = () => {
         },
       },
     ];
-  }, []);
+
+    const dataRoomDetail = dataRoom.roomDetail;
+
+    const dataUserDetail = userDetail.userInfo;
+
+    if (dataUserDetail.id == dataRoomDetail.idOwner) {
+      listAction.push({
+        label: "Change Password",
+        value: "change_password",
+        onChange: async () => {
+          try {
+            return publish(LIST_EVENT.MODAL_GLOBAL, {
+              Component: ChangePassword,
+              ComponentProps: {
+                idRoom: params.idRoom, // Pass the room ID to the modal
+              },
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        },
+      });
+    }
+
+    return listAction;
+  }, [dataRoom]);
 
   /**
    * add or remove song
