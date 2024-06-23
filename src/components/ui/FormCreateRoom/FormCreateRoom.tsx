@@ -11,9 +11,12 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
 import { RoomsUrl } from "src/apis/request";
 import { LIST_EVENT, publish } from "src/service/event";
 import httpRequest from "src/service/httpRequest";
+import { UserType } from "src/store/UserSlice";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 
 import * as yup from "yup";
 
@@ -32,6 +35,10 @@ const initialValues = {
 const CreateRoom: React.FC<Props> = (props) => {
   const { callBack } = props;
 
+  const userDetail = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+  );
+
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -47,7 +54,13 @@ const CreateRoom: React.FC<Props> = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await httpRequest.getPost(RoomsUrl(), values);
+        const body = {
+          ...values,
+
+          idOwner: userDetail.userInfo?.id,
+        };
+
+        await httpRequest.getPost(RoomsUrl(), body);
 
         // feedback alert for user after create room success
         publish(LIST_EVENT.SNACKBAR, {
