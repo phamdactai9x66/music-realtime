@@ -17,6 +17,10 @@ import { UserType } from "src/store/UserSlice";
 import { addOrRemoveUser } from "src/utils";
 
 import KeyIcon from "@mui/icons-material/Key";
+import httpRequest from "src/service/httpRequest";
+import { RoomsUrl } from "src/apis/request";
+import VerifyPassword from "src/components/ui/FormVertifyPassword/FormVerifyPassword";
+import { LIST_EVENT, publish } from "src/service/event";
 
 type Props = {
   listRoomData: looseObj[] | [];
@@ -31,13 +35,7 @@ const ListRooms: React.FC<Props> = (props) => {
 
   const { listRoomData } = props;
 
-  /**
-   * navigate to room detail
-   * @param idRoom
-   * @returns
-   */
-
-  const handleNavigate = (idRoom: string) => async () => {
+  const handleNavigateRoom = async (idRoom: string) => {
     try {
       const idUser = userDetail.userInfo?.id;
 
@@ -45,6 +43,42 @@ const ListRooms: React.FC<Props> = (props) => {
 
       navigate(`${PATH_ROUTER.ROOMS}/${idRoom}`);
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**
+   * Handles navigation to a room. If the room requires a password, it will
+   * display a password verification modal. Otherwise, it will navigate to the
+   * room.
+   *
+   * @param {string} idRoom - The ID of the room to navigate to.
+   * @returns {Promise<void>} A promise that resolves when navigation is complete.
+   */
+  const handleNavigate = (idRoom: string) => async () => {
+    try {
+      const cb = () => {
+        // Navigate to the room
+        handleNavigateRoom(idRoom);
+      };
+
+      // Retrieve room data from the server
+      const dataRes = await httpRequest.getOne(RoomsUrl(idRoom));
+
+      // If the room requires a password, display a password verification modal
+      if (dataRes.allowPassword) {
+        return publish(LIST_EVENT.MODAL_GLOBAL, {
+          Component: VerifyPassword,
+          ComponentProps: {
+            idRoom, // Pass the room ID to the modal
+            callBack: cb,
+          },
+        });
+      }
+
+      cb();
+    } catch (error) {
+      // If an error occurs, log it
       console.log(error);
     }
   };
