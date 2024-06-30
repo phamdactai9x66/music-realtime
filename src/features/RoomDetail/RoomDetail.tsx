@@ -170,6 +170,12 @@ const Rooms: React.FC<RoomsProps> = () => {
               Component: ChangePassword,
               ComponentProps: {
                 idRoom: params.idRoom, // Pass the room ID to the modal
+                callBack: () => {
+                  // Close the modal
+                  publish(LIST_EVENT.MODAL_GLOBAL, {
+                    Component: "",
+                  });
+                },
               },
             });
           } catch (error) {

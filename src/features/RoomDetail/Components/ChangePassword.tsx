@@ -61,12 +61,19 @@ const ChangePassword: React.FC<Props> = (props) => {
       try {
         if (!idRoom) throw Error("id not found");
 
+        // get data of current room
         const dataRes = await httpRequest.getOne(RoomsUrl(idRoom));
 
-        if (dataRes.password == values.new_password) {
-          publish(LIST_EVENT.MODAL_GLOBAL, {
-            Component: null,
-            ComponentProps: {},
+        if (dataRes.password == values.verify_password) {
+          // change password
+          await httpRequest.getPut(RoomsUrl(idRoom), {
+            password: values.new_password,
+          });
+
+          publish(LIST_EVENT.SNACKBAR, {
+            display: true,
+            severity: "success",
+            message: "Your password has been changed successfully",
           });
 
           return callBack?.();
@@ -179,7 +186,8 @@ const ChangePassword: React.FC<Props> = (props) => {
 };
 
 const validationSchema = yup.object({
-  password: yup.string().required("Password is required"),
+  verify_password: yup.string().required("Verify password is required"),
+  new_password: yup.string().required("New password is required"),
 });
 
 export default ChangePassword;
