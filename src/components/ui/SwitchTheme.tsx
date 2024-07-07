@@ -1,10 +1,7 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import FormGroup from "@mui/material/FormGroup";
+import { styled, useColorScheme } from "@mui/material/styles";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch, { SwitchProps } from "@mui/material/Switch";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 
 type SwitchThemeProps = object & React.PropsWithChildren;
 
@@ -56,11 +53,15 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const SwitchTheme: React.FC<SwitchThemeProps> = (props) => {
+  const { mode, setMode } = useColorScheme();
+
   const handleSwitchTheme = (
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    console.log(checked);
+    const theme = checked ? "dark" : "light";
+
+    setMode(theme);
   };
 
   return (
@@ -69,7 +70,7 @@ const SwitchTheme: React.FC<SwitchThemeProps> = (props) => {
         <MaterialUISwitch
           sx={{ m: 1 }}
           onChange={handleSwitchTheme}
-          defaultChecked
+          checked={mode == "dark" ? true : false}
         />
       }
       sx={{

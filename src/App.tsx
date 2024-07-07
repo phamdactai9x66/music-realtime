@@ -4,8 +4,7 @@ import "./App.css";
 
 import router from "src/routers/routers";
 import { initRequest } from "src/service/httpRequest";
-import { useStore } from "react-redux";
-import { ThemeProvider } from "@mui/material";
+import { Experimental_CssVarsProvider, ThemeProvider } from "@mui/material";
 import useThemeRoot from "src/theme/themeRoot";
 import { CssBaseline } from "@mui/material";
 import SnackbarProvider from "./components/ui/SnackbarProvider";
@@ -16,16 +15,16 @@ import ModalGlobal from "./components/ui/ModalGlobal";
 function App() {
   const theme = useThemeRoot();
 
-  const store = useStore();
-
-  initRequest(store);
+  initRequest();
 
   return (
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider />
-      <CssBaseline />
-      <ModalGlobal />
-      <RouterProvider router={router} fallbackElement={<>loading...</>} />
+    <ThemeProvider theme={theme()}>
+      <Experimental_CssVarsProvider>
+        <SnackbarProvider />
+        <CssBaseline />
+        <ModalGlobal />
+        <RouterProvider router={router} fallbackElement={<>loading...</>} />
+      </Experimental_CssVarsProvider>
     </ThemeProvider>
   );
 }
