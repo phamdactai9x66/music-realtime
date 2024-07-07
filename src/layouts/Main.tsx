@@ -29,6 +29,7 @@ import { RootState, TYPE_REDUCER } from "src/store/configureStore";
 import { UserType } from "src/store/UserSlice";
 import { makeStyles } from "@mui/styles";
 import { Avatar } from "@mui/material";
+import SwitchTheme from "src/components/ui/SwitchTheme";
 
 const drawerWidth = 240;
 
@@ -189,6 +190,8 @@ export default function MiniDrawer() {
             {LABEL_PATH[location.pathname]}
           </Typography>
         </Toolbar>
+
+        <SwitchTheme />
 
         {renderAvatar()}
       </AppBar>

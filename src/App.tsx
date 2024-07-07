@@ -5,7 +5,7 @@ import "./App.css";
 import router from "src/routers/routers";
 import { initRequest } from "src/service/httpRequest";
 import { useStore } from "react-redux";
-import { ThemeProvider } from "@mui/styles";
+import { ThemeProvider } from "@mui/material";
 import useThemeRoot from "src/theme/themeRoot";
 import { CssBaseline } from "@mui/material";
 import SnackbarProvider from "./components/ui/SnackbarProvider";
@@ -21,7 +21,7 @@ function App() {
   initRequest(store);
 
   return (
-    <ThemeProvider theme={theme()}>
+    <ThemeProvider theme={theme}>
       <SnackbarProvider />
       <CssBaseline />
       <ModalGlobal />
