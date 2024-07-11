@@ -15,6 +15,7 @@ import { myFavoritesUrl, songUrl } from "src/apis/request";
 import { equalTo, orderByChild } from "firebase/database";
 import { songType, triggerSong } from "src/store/SongSlice";
 import { cloneObj } from "src/utils";
+import { useStreaming } from "src/hook";
 
 const useStyles = makeStyles((theme: Theme) => {
   return {
@@ -45,6 +46,13 @@ export default function StandardImageList() {
 
   // list favorites only show when user logged
   if (!userDetail.isLogin) return <></>;
+
+  useStreaming({
+    url: myFavoritesUrl(),
+    callBack: () => {
+      handleListFavorites();
+    },
+  });
 
   /**
    * call api get list favorites base on user
@@ -88,11 +96,6 @@ export default function StandardImageList() {
 
     getData && dispatch(triggerSong(getData));
   };
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  React.useEffect(() => {
-    handleListFavorites();
-  }, [userDetail.userInfo.id]);
 
   /**
    * event trigger when next, back, pick page

@@ -13,7 +13,7 @@ const useStreaming = (props: useStreamingProps) => {
     const starCountRef = ref(getDatabase(), url);
 
     onValue(starCountRef, (snapshot) => {
-      const data = snapshot.val();
+      const data = snapshot.val() || {};
 
       // add unique for object
       if (snapshot.key) {
