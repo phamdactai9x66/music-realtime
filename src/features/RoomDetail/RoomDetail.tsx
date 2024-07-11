@@ -65,17 +65,43 @@ const Rooms: React.FC<RoomsProps> = () => {
     roomDetail: {},
   });
 
+  const closeEvent = React.useRef(false);
+
+  const dataRoomDetail = dataRoom.roomDetail;
+
+  const dataUserDetail = userDetail.userInfo;
+
+  const isOwner = dataUserDetail.id == dataRoomDetail.idOwner;
+
   useStreaming({
     url: RoomsUrl(params.idRoom),
     callBack: async (data) => {
       try {
         const { users = [], songs = [], currentSong } = data;
 
+        if (closeEvent.current) return;
+
         // get list data room , user
         const listApi = [
           httpRequest.getDataObj(userUrl()),
           httpRequest.getDataObj(songUrl()),
         ];
+
+        const userInRoom = users.find(
+          (e: looseObj) => (e?.id || e) === userDetail.userInfo.id
+        );
+
+        // check user exist in room
+
+        if (!userInRoom) {
+          publish(LIST_EVENT.SNACKBAR, {
+            display: true,
+            severity: "warning",
+            message: "Admin has kicked you out of this room",
+          });
+
+          navigate(PATH_ROUTER.ROOMS);
+        }
 
         const [userOrigin, songOrigin] = await Promise.all(listApi);
 
@@ -146,6 +172,8 @@ const Rooms: React.FC<RoomsProps> = () => {
           try {
             const idUser = userDetail.userInfo?.id;
 
+            closeEvent.current = true;
+
             addOrRemoveUser({ idRoom: params.idRoom, idUser }, "REMOVE");
 
             navigate(PATH_ROUTER.ROOMS);
@@ -156,11 +184,7 @@ const Rooms: React.FC<RoomsProps> = () => {
       },
     ];
 
-    const dataRoomDetail = dataRoom.roomDetail;
-
-    const dataUserDetail = userDetail.userInfo;
-
-    if (dataUserDetail.id == dataRoomDetail.idOwner) {
+    if (isOwner) {
       listAction.push({
         label: "Change Password",
         value: "change_password",
@@ -186,7 +210,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     }
 
     return listAction;
-  }, [dataRoom]);
+  }, [dataRoom, isOwner]);
 
   /**
    * add or remove song
@@ -225,7 +249,7 @@ const Rooms: React.FC<RoomsProps> = () => {
    * play or pause song
    */
 
-  const onPlaySong = async (data: songType) => {
+  const onPlaySong: any = async (data: songType) => {
     try {
       const idSong = data?._id;
 
@@ -245,7 +269,12 @@ const Rooms: React.FC<RoomsProps> = () => {
   return (
     <div className={classes.container}>
       <Stack flexDirection={"row"} justifyContent={"space-between"}>
-        <UserActive data={dataRoom.dataUser} label={"name"} img={"picture"} />
+        <UserActive
+          data={dataRoom.dataUser}
+          label={"name"}
+          img={"picture"}
+          isOwner={isOwner}
+        />
         <MenuItems options={actionsMenu} />
       </Stack>
 

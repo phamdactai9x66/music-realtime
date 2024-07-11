@@ -3,6 +3,13 @@ import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import { useSelector } from "react-redux";
+import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+import { UserType } from "src/store/UserSlice";
+import httpRequest from "src/service/httpRequest";
+import { RoomsUrl } from "src/apis/request";
+import { useParams } from "react-router-dom";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -37,10 +44,34 @@ type BadgeAvatarsProps = {
   data?: looseObj[];
   label?: string;
   img?: string;
+  isOwner?: boolean;
 } & React.PropsWithChildren;
 
+const SmallAvatar = styled(CancelRoundedIcon)(({ theme }) => ({
+  width: 20,
+  height: 20,
+  cursor: "pointer",
+}));
+
 export default function BadgeAvatars(props: BadgeAvatarsProps) {
-  const { data = [], label = "", img = "" } = props || {};
+  const { data = [], label = "", img = "", isOwner } = props || {};
+
+  const params = useParams();
+
+  const userDetail = useSelector(
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+  );
+
+  const handleKickUser = async (curr: looseObj) => {
+    // don't allow kick yourself
+    if (userDetail.userInfo?.id == curr?._id) return;
+
+    const filterUsers = data
+      .filter((item) => item?._id != curr?._id)
+      .map((e) => e?.id || e._id || e);
+
+    await httpRequest.getPut(RoomsUrl(params.idRoom), { users: filterUsers });
+  };
 
   return (
     <Stack direction="row" spacing={2}>
@@ -49,15 +80,28 @@ export default function BadgeAvatars(props: BadgeAvatarsProps) {
 
         const imgItem = curr?.[img] || "";
 
+        const isSelf = userDetail?.userInfo?.id != curr?.id;
+
         return (
-          <StyledBadge
+          <Badge
             overlap="circular"
-            key={curr?._id}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            variant="dot"
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            badgeContent={
+              isOwner && isSelf ? <SmallAvatar color="error" /> : null
+            }
+            onClick={() => {
+              isOwner && isSelf && handleKickUser(curr);
+            }}
           >
-            <Avatar alt={labelItem} src={imgItem} />
-          </StyledBadge>
+            <StyledBadge
+              overlap="circular"
+              key={curr?._id}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              variant="dot"
+            >
+              <Avatar alt={labelItem} src={imgItem} />
+            </StyledBadge>
+          </Badge>
         );
       })}
     </Stack>
