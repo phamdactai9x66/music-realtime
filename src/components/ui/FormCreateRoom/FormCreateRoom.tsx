@@ -1,4 +1,6 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import * as React from 'react';
+
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -8,17 +10,18 @@ import {
   Checkbox as CheckBox,
   InputAdornment,
   IconButton,
-} from "@mui/material";
-import { useFormik } from "formik";
-import React from "react";
-import { useSelector } from "react-redux";
-import { RoomsUrl } from "src/apis/request";
-import { LIST_EVENT, publish } from "src/service/event";
-import httpRequest from "src/service/httpRequest";
-import { UserType } from "src/store/UserSlice";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
+} from '@mui/material';
+import { useFormik } from 'formik';
+import { useSelector } from 'react-redux';
+import * as yup from 'yup';
 
-import * as yup from "yup";
+import { RoomsUrl } from 'src/apis/request';
+import { LIST_EVENT, publish } from 'src/service/event';
+import httpRequest from 'src/service/httpRequest';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import type { UserType } from 'src/store/UserSlice';
+
 
 type Props = {
   open: boolean;
@@ -27,16 +30,16 @@ type Props = {
 } & React.PropsWithChildren;
 
 const initialValues = {
-  name_room: "",
+  name_room: '',
   allowPassword: false,
-  password: "",
+  password: '',
 };
 
 const CreateRoom: React.FC<Props> = (props) => {
   const { callBack } = props;
 
   const userDetail = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType,
   );
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -44,7 +47,7 @@ const CreateRoom: React.FC<Props> = (props) => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -65,8 +68,8 @@ const CreateRoom: React.FC<Props> = (props) => {
         // feedback alert for user after create room success
         publish(LIST_EVENT.SNACKBAR, {
           display: true,
-          severity: "success",
-          message: "Create Room Successfully",
+          severity: 'success',
+          message: 'Create Room Successfully',
         });
 
         callBack?.();
@@ -74,8 +77,8 @@ const CreateRoom: React.FC<Props> = (props) => {
         // feedback alert for user after create room success
         publish(LIST_EVENT.SNACKBAR, {
           display: true,
-          severity: "error",
-          message: "Create Room Unsuccessfully",
+          severity: 'error',
+          message: 'Create Room Unsuccessfully',
         });
       }
     },
@@ -120,7 +123,7 @@ const CreateRoom: React.FC<Props> = (props) => {
               checked={values.allowPassword}
               name="allowPassword"
               onChange={(event, checked) => {
-                setFieldValue("allowPassword", checked);
+                setFieldValue('allowPassword', checked);
               }}
             />
           }
@@ -133,7 +136,7 @@ const CreateRoom: React.FC<Props> = (props) => {
             fullWidth
             label="Password"
             name="password"
-            type={!showPassword ? "password" : "text"}
+            type={!showPassword ? 'password' : 'text'}
             value={values.password}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -161,8 +164,8 @@ const CreateRoom: React.FC<Props> = (props) => {
         <Button
           color="primary"
           sx={{
-            ":focus": {
-              outline: "none !important",
+            ':focus': {
+              outline: 'none !important',
             },
           }}
           type="submit"
@@ -177,9 +180,9 @@ const CreateRoom: React.FC<Props> = (props) => {
 };
 
 const validationSchema = yup.object({
-  name_room: yup.string().required("Name Room is required"),
-  password: yup.string().when("allowPassword", ([allowPassword], schema) => {
-    return allowPassword ? schema.required("Password is required") : schema;
+  name_room: yup.string().required('Name Room is required'),
+  password: yup.string().when('allowPassword', ([allowPassword], schema) => {
+    return allowPassword ? schema.required('Password is required') : schema;
   }),
 });
 

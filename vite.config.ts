@@ -1,16 +1,26 @@
-import { fileURLToPath, URL } from "url";
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import { fileURLToPath, URL } from 'url';
 
-// https://vitejs.dev/config/
+import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite';
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: [
       {
-        find: "src",
-        replacement: fileURLToPath(new URL("./src", import.meta.url)),
+        find: 'src',
+        replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
     ],
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      exclude: ['node_modules/', 'src/main.tsx'],
+    },
   },
 });

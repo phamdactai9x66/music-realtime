@@ -1,3 +1,3 @@
-import { formatData } from "src/utils";
+import { formatData } from 'src/utils';
 
 formatData();

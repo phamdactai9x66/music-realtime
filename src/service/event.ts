@@ -1,9 +1,9 @@
 type listenerCb = (this: Document, ev: any) => any;
 
 export enum LIST_EVENT {
-  CURRENT_SONG = "CURRENT_SONG",
-  SNACKBAR = "SNACKBAR",
-  MODAL_GLOBAL = "MODAL_GLOBAL",
+  CURRENT_SONG = 'CURRENT_SONG',
+  SNACKBAR = 'SNACKBAR',
+  MODAL_GLOBAL = 'MODAL_GLOBAL',
 }
 
 function subscribe(eventName: LIST_EVENT, listener: listenerCb) {

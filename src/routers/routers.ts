@@ -1,22 +1,23 @@
+import type {
+  LoaderFunctionArgs } from 'react-router-dom';
 import {
-  LoaderFunctionArgs,
   createBrowserRouter,
   redirect,
-} from "react-router-dom";
-import Home from "src/features/Home/Home";
-import Login from "src/features/Login";
-import Rooms from "src/features/Rooms";
-import RoomDetail from "src/features/RoomDetail";
-import { TYPE_REDUCER, store } from "src/store/configureStore";
+} from 'react-router-dom';
 
-import { Main } from "src/layouts";
-import { UserType } from "src/store/UserSlice";
+import Home from 'src/features/Home/Home';
+import Login from 'src/features/Login';
+import RoomDetail from 'src/features/RoomDetail';
+import Rooms from 'src/features/Rooms';
+import { Main } from 'src/layouts';
+import { TYPE_REDUCER, store } from 'src/store/configureStore';
+import type { UserType } from 'src/store/UserSlice';
 
 export const PATH_ROUTER: looseObj = {
-  ROOT: "/",
-  LOGIN: "/login",
-  ROOMS: "/rooms",
-  ROOM_DETAIL: "/rooms/:idRoom",
+  ROOT: '/',
+  LOGIN: '/login',
+  ROOMS: '/rooms',
+  ROOM_DETAIL: '/rooms/:idRoom',
 };
 
 export const NAB_ROUTER_PUBLIC = [PATH_ROUTER.ROOT, PATH_ROUTER.LOGIN];
@@ -24,10 +25,10 @@ export const NAB_ROUTER_PUBLIC = [PATH_ROUTER.ROOT, PATH_ROUTER.LOGIN];
 export const NAB_ROUTER_PRIVATE = [PATH_ROUTER.ROOT, PATH_ROUTER.ROOMS];
 
 export const LABEL_PATH: looseObj = {
-  [PATH_ROUTER.ROOT]: "Home",
-  [PATH_ROUTER.LOGIN]: "Login",
-  [PATH_ROUTER.ROOMS]: "Rooms",
-  [PATH_ROUTER.ROOM_DETAIL]: "Room Detail",
+  [PATH_ROUTER.ROOT]: 'Home',
+  [PATH_ROUTER.LOGIN]: 'Login',
+  [PATH_ROUTER.ROOMS]: 'Rooms',
+  [PATH_ROUTER.ROOM_DETAIL]: 'Room Detail',
 };
 
 export const DISPLAY_AUDIO: looseObj = {
@@ -37,7 +38,7 @@ export const DISPLAY_AUDIO: looseObj = {
 
 const router = createBrowserRouter([
   {
-    id: "root",
+    id: 'root',
     path: PATH_ROUTER.ROOT,
     loader() {
       // Our root route always provides the user, if logged in
@@ -75,8 +76,8 @@ function protectedLoader({ request }: LoaderFunctionArgs) {
 
   if (!state.isLogin) {
     const params = new URLSearchParams();
-    params.set("from", new URL(request.url).pathname);
-    return redirect("/login?" + params.toString());
+    params.set('from', new URL(request.url).pathname);
+    return redirect('/login?' + params.toString());
   }
   return null;
 }

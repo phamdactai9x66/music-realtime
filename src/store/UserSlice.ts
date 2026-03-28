@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export type IUserInfo =
   | {
@@ -35,7 +36,7 @@ const initialState: UserType = {
 };
 
 export const counterSlice = createSlice({
-  name: "APP/COUNTER",
+  name: 'APP/COUNTER',
   initialState,
   reducers: {
     loginUser: (state, actions: PayloadAction<IUserInfo>) => {

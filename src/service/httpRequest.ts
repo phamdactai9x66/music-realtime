@@ -1,5 +1,5 @@
 // import { Action, Store } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from 'axios';
 import {
   get,
   getDatabase,
@@ -9,16 +9,16 @@ import {
   remove,
   set,
   update,
-} from "firebase/database";
+} from 'firebase/database';
 // import { increment } from "src/store/SongSlice";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const axiosClient = axios.create({
-  baseURL: "https://example.com/api/v1",
+  baseURL: 'https://example.com/api/v1',
 
   headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
 
   timeout: 20 * 1000,
@@ -32,7 +32,7 @@ export const initRequest = () => {
       return request;
     },
     null,
-    { synchronous: true }
+    { synchronous: true },
   );
 
   axios.interceptors.response.use(
@@ -46,14 +46,13 @@ export const initRequest = () => {
         //Add Logic to
       }
       return Promise.reject(error);
-    }
+    },
   );
 };
 
 class httpRequest {
   private db = getDatabase;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getData<T = looseObj>(url: string, ...rest: any): Promise<T[]> {
     const queryApi = query(ref(this.db(), url), ...rest);
 

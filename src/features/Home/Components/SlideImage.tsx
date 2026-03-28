@@ -1,26 +1,29 @@
-import * as React from "react";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-import { Box, Theme, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import * as React from 'react';
 
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import type { Theme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import { makeStyles } from '@mui/styles';
+import { equalTo, orderByChild } from 'firebase/database';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
-import { UserType } from "src/store/UserSlice";
-import { useDispatch, useSelector } from "react-redux";
-import httpRequest from "src/service/httpRequest";
-import { myFavoritesUrl, songUrl } from "src/apis/request";
-import { equalTo, orderByChild } from "firebase/database";
-import { songType, triggerSong } from "src/store/SongSlice";
-import { cloneObj } from "src/utils";
-import { useStreaming } from "src/hook";
+import { myFavoritesUrl, songUrl } from 'src/apis/request';
+import { useStreaming } from 'src/hook';
+import httpRequest from 'src/service/httpRequest';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import type { songType } from 'src/store/SongSlice';
+import { triggerSong } from 'src/store/SongSlice';
+import type { UserType } from 'src/store/UserSlice';
+import { cloneObj } from 'src/utils';
 
 const useStyles = makeStyles((theme: Theme) => {
   return {
     containerImage: {
-      "& img": {
+      '& img': {
         borderRadius: theme.spacing(1),
       },
     },
@@ -41,11 +44,8 @@ export default function StandardImageList() {
   const dispatch = useDispatch();
 
   const userDetail = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType,
   );
-
-  // list favorites only show when user logged
-  if (!userDetail.isLogin) return <></>;
 
   useStreaming({
     url: myFavoritesUrl(),
@@ -54,18 +54,21 @@ export default function StandardImageList() {
     },
   });
 
+  // list favorites only show when user logged
+  if (!userDetail.isLogin) return <></>;
+
   /**
    * call api get list favorites base on user
    */
 
   const handleListFavorites = async () => {
     try {
-      const idUser = userDetail.userInfo?.id || "";
+      const idUser = userDetail.userInfo?.id || '';
 
       const res = await httpRequest.getData(
         myFavoritesUrl(),
-        orderByChild("id_user"),
-        equalTo(idUser)
+        orderByChild('id_user'),
+        equalTo(idUser),
       );
 
       const dataOrigin: looseObj[] = cloneObj(res);
@@ -107,14 +110,14 @@ export default function StandardImageList() {
 
     const maxDigits = listOriginFavorites.current.slice(
       currentPage * PAGE_SIZE,
-      PAGE_SIZE * (currentPage + 1)
+      PAGE_SIZE * (currentPage + 1),
     );
 
     setListFavorites(maxDigits);
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: '100%' }}>
       <Typography>My Favorite</Typography>
       {/* list images */}
       <ImageList cols={3} className={classes.containerImage}>
@@ -140,7 +143,7 @@ export default function StandardImageList() {
           variant="outlined"
           shape="rounded"
           onChange={onChangePage}
-          sx={{ display: "flex", justifyContent: "flex-end" }}
+          sx={{ display: 'flex', justifyContent: 'flex-end' }}
         />
       </Stack>
     </Box>

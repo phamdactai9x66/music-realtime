@@ -1,28 +1,31 @@
-import * as React from "react";
-import ListSongs from "src/components/ui/ListItems";
-import UserActive from "./Components/UserActive";
-import { makeStyles } from "@mui/styles";
-import { Box, Stack } from "@mui/material";
-import MenuItems from "src/components/ui/MenuItem";
+import * as React from 'react';
 
-import AutocompleteAsync from "src/components/fields/AutocompleteAsync";
-import { RoomsUrl, songUrl, userUrl } from "src/apis/request";
-import httpRequest from "src/service/httpRequest";
+import { Box, Stack } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useNavigate, useParams } from "react-router-dom";
-import { addOrRemoveUser, cloneObj } from "src/utils";
-import { useStreaming } from "src/hook";
-import { PATH_ROUTER } from "src/routers/routers";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
-import { UserType } from "src/store/UserSlice";
-import { songType, triggerSong } from "src/store/SongSlice";
-import { LIST_EVENT, publish, subscribe, unsubscribe } from "src/service/event";
-import ChangePassword from "./Components/ChangePassword";
+import { RoomsUrl, songUrl, userUrl } from 'src/apis/request';
+import AutocompleteAsync from 'src/components/fields/AutocompleteAsync';
+import ListSongs from 'src/components/ui/ListItems';
+import MenuItems from 'src/components/ui/MenuItem';
+import { useStreaming } from 'src/hook';
+import { PATH_ROUTER } from 'src/routers/routers';
+import { LIST_EVENT, publish, subscribe, unsubscribe } from 'src/service/event';
+import httpRequest from 'src/service/httpRequest';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import { triggerSong } from 'src/store/SongSlice';
+import type { songType } from 'src/store/SongSlice';
+import type { UserType } from 'src/store/UserSlice';
+import { addOrRemoveUser, cloneObj } from 'src/utils';
+
+import ChangePassword from './Components/ChangePassword';
+import UserActive from './Components/UserActive';
 
 const useStyle = makeStyles(() => {
   return {
-    container: { display: "flex", flexWrap: "wrap", flexDirection: "column" },
+    container: { display: 'flex', flexWrap: 'wrap', flexDirection: 'column' },
   };
 });
 
@@ -46,7 +49,7 @@ type TRoom = {
 
 const Rooms: React.FC<RoomsProps> = () => {
   const userDetail = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType,
   );
 
   const dicSong = React.useRef<looseObj>({});
@@ -88,7 +91,7 @@ const Rooms: React.FC<RoomsProps> = () => {
         ];
 
         const userInRoom = users.find(
-          (e: looseObj) => (e?.id || e) === userDetail.userInfo.id
+          (e: looseObj) => (e?.id || e) === userDetail.userInfo.id,
         );
 
         // check user exist in room
@@ -96,8 +99,8 @@ const Rooms: React.FC<RoomsProps> = () => {
         if (!userInRoom) {
           publish(LIST_EVENT.SNACKBAR, {
             display: true,
-            severity: "warning",
-            message: "Admin has kicked you out of this room",
+            severity: 'warning',
+            message: 'Admin has kicked you out of this room',
           });
 
           navigate(PATH_ROUTER.ROOMS);
@@ -139,8 +142,6 @@ const Rooms: React.FC<RoomsProps> = () => {
 
   React.useEffect(() => {
     const cb = async (data: looseObj) => {
-      // realtime update song in here
-
       try {
         const {
           status,
@@ -160,21 +161,22 @@ const Rooms: React.FC<RoomsProps> = () => {
     return () => {
       unsubscribe(LIST_EVENT.CURRENT_SONG, cb);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // list action for menu
   const actionsMenu = React.useMemo(() => {
-    let listAction = [
+    const listAction = [
       {
-        label: "Back",
-        value: "back",
+        label: 'Back',
+        value: 'back',
         onChange: async () => {
           try {
             const idUser = userDetail.userInfo?.id;
 
             closeEvent.current = true;
 
-            addOrRemoveUser({ idRoom: params.idRoom, idUser }, "REMOVE");
+            addOrRemoveUser({ idRoom: params.idRoom, idUser }, 'REMOVE');
 
             navigate(PATH_ROUTER.ROOMS);
           } catch (error) {
@@ -186,8 +188,8 @@ const Rooms: React.FC<RoomsProps> = () => {
 
     if (isOwner) {
       listAction.push({
-        label: "Change Password",
-        value: "change_password",
+        label: 'Change Password',
+        value: 'change_password',
         onChange: async () => {
           try {
             return publish(LIST_EVENT.MODAL_GLOBAL, {
@@ -197,7 +199,7 @@ const Rooms: React.FC<RoomsProps> = () => {
                 callBack: () => {
                   // Close the modal
                   publish(LIST_EVENT.MODAL_GLOBAL, {
-                    Component: "",
+                    Component: '',
                   });
                 },
               },
@@ -210,6 +212,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     }
 
     return listAction;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataRoom, isOwner]);
 
   /**
@@ -221,7 +224,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     try {
       const idSong = data._id;
 
-      if (!idSong) return "";
+      if (!idSong) return '';
 
       const dataRoom = await httpRequest.getOne(RoomsUrl(params.idRoom));
 
@@ -253,7 +256,7 @@ const Rooms: React.FC<RoomsProps> = () => {
     try {
       const idSong = data?._id;
 
-      if (!idSong) return "";
+      if (!idSong) return '';
 
       const body = {
         currentSong: idSong,
@@ -268,11 +271,11 @@ const Rooms: React.FC<RoomsProps> = () => {
 
   return (
     <div className={classes.container}>
-      <Stack flexDirection={"row"} justifyContent={"space-between"}>
+      <Stack flexDirection={'row'} justifyContent={'space-between'}>
         <UserActive
           data={dataRoom.dataUser}
-          label={"name"}
-          img={"picture"}
+          label={'name'}
+          img={'picture'}
           isOwner={isOwner}
         />
         <MenuItems options={actionsMenu} />

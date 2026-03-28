@@ -1,10 +1,13 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import CircularProgress from "@mui/material/CircularProgress";
-import httpRequest from "src/service/httpRequest";
-import { cloneObj } from "src/utils";
-import SearchIcon from "@mui/icons-material/Search";
+import * as React from 'react';
+
+import SearchIcon from '@mui/icons-material/Search';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
+
+import httpRequest from 'src/service/httpRequest';
+import { cloneObj } from 'src/utils';
+
 
 type AsynchronousProps = {
   url: string;
@@ -40,6 +43,7 @@ const AutocompleteAsync: React.FC<AsynchronousProps> = (props) => {
     return () => {
       active = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   React.useEffect(() => {

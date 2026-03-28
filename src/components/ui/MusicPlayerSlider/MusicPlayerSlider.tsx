@@ -1,61 +1,65 @@
-import * as React from "react";
-import { Theme, styled, useTheme } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
+import * as React from 'react';
 
 import {
   PauseRounded,
   PlayArrowRounded,
   FastForwardRounded,
   FastRewindRounded,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import type { Theme } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import { useLocation } from "react-router-dom";
-import { DISPLAY_AUDIO } from "src/routers/routers";
-import { getRouteMatchPath, isMatchRouters } from "src/utils";
-import { useSelector } from "react-redux";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
-import { songType } from "src/store/SongSlice";
-import MyFavorites from "./Components/MyFavorites";
-import { LIST_EVENT, publish } from "src/service/event";
+import { DISPLAY_AUDIO } from 'src/routers/routers';
+import { LIST_EVENT, publish } from 'src/service/event';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import type { songType } from 'src/store/SongSlice';
+import { getRouteMatchPath, isMatchRouters } from 'src/utils';
+
+import MyFavorites from './Components/MyFavorites';
+
 
 const useStyle = makeStyles((theme: Theme) => {
   return {
     containerBox: {
-      position: "fixed",
+      position: 'fixed',
       bottom: 0,
       left: 0,
-      padding: `0 1em`,
+      padding: '0 1em',
       background: theme.palette.background.paper,
     },
     playAudio: {
-      position: "relative",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       mt: -1,
     },
     myFavorites: {
-      position: "absolute !important",
+      position: 'absolute !important',
       right: 0,
     },
   };
 });
 
-const CoverImage = styled("div")(() => ({
+const CoverImage = styled('div')(() => ({
   width: 100,
   height: 100,
-  objectFit: "cover",
-  overflow: "hidden",
+  objectFit: 'cover',
+  overflow: 'hidden',
   flexShrink: 0,
   borderRadius: 8,
-  backgroundColor: "rgba(0,0,0,0.08)",
-  "& > img": {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
+  backgroundColor: 'rgba(0,0,0,0.08)',
+  '& > img': {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
 }));
 
@@ -63,7 +67,7 @@ export default function MusicPlayerSlider() {
   const theme = useTheme();
 
   const currentSong = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.SONG] as songType
+    (state: RootState) => state[TYPE_REDUCER.SONG] as songType,
   );
 
   const audioPlayer = React.useRef<HTMLAudioElement>(null); // reference our audio component
@@ -82,30 +86,23 @@ export default function MusicPlayerSlider() {
 
   React.useEffect(() => {
     if (audioPlayer.current && currentSong.audio_url) {
-      // reset new song
-
       audioPlayer.current.currentTime = 0;
-
       audioPlayer.current.play();
-
       return setIsPlaying(true);
     }
 
     window.callbackFn = togglePlayPauseGlobal;
 
+    const player = audioPlayer.current;
     return () => {
-      // trigger when switching song
-
-      if (audioPlayer.current && currentSong.audio_url) {
-        // pause old song
-        audioPlayer.current.pause();
-
+      if (player && currentSong.audio_url) {
+        player.pause();
         setIsPlaying(false);
       }
     };
   }, [currentSong.audio_url]);
 
-  const mainIconColor = theme.palette.mode === "dark" ? "#fff" : "#000";
+  const mainIconColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
 
   /**
    * toggle play or pause for song global
@@ -154,14 +151,14 @@ export default function MusicPlayerSlider() {
     <Box
       className={classes.containerBox}
       sx={{
-        width: "100%",
-        overflow: "hidden",
-        visibility: DISPLAY_AUDIO?.[currentPattern] ? "visible" : "hidden",
+        width: '100%',
+        overflow: 'hidden',
+        visibility: DISPLAY_AUDIO?.[currentPattern] ? 'visible' : 'hidden',
       }}
     >
       <audio ref={audioPlayer} src={currentSong.audio_url}></audio>
 
-      <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <CoverImage>
           <img alt="can't win - Chilling Sunday" src={currentSong.image_song} />
         </CoverImage>
@@ -188,14 +185,14 @@ export default function MusicPlayerSlider() {
         {/* play and pause song */}
 
         <IconButton
-          aria-label={isPlaying ? "play" : "pause"}
+          aria-label={isPlaying ? 'play' : 'pause'}
           onClick={togglePlayPause}
         >
           {isPlaying ? (
-            <PauseRounded sx={{ fontSize: "3rem" }} htmlColor={mainIconColor} />
+            <PauseRounded sx={{ fontSize: '3rem' }} htmlColor={mainIconColor} />
           ) : (
             <PlayArrowRounded
-              sx={{ fontSize: "3rem" }}
+              sx={{ fontSize: '3rem' }}
               htmlColor={mainIconColor}
             />
           )}

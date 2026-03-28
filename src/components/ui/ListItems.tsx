@@ -1,13 +1,15 @@
-import * as React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import { Box, Theme } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import * as React from 'react';
+
+import type { Theme } from '@mui/material';
+import { Box } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
 
 type ListSongsProps = {
   data: looseObj[];
@@ -17,10 +19,10 @@ type ListSongsProps = {
 const useStyle = makeStyles((theme: Theme) => {
   return {
     container: {
-      width: "100%",
-      bgcolor: "background.paper",
-      overflow: "auto",
-      maxHeight: "calc(100vh - 200px)",
+      width: '100%',
+      bgcolor: 'background.paper',
+      overflow: 'auto',
+      maxHeight: 'calc(100vh - 200px)',
       paddingRight: theme.spacing(2),
     },
   };
@@ -40,11 +42,11 @@ const ListSongs: React.FC<ListSongsProps> = (props) => {
             <ListItem
               alignItems="flex-start"
               onClick={() => onClick?.(data)}
-              sx={{ cursor: "pointer" }}
+              sx={{ cursor: 'pointer' }}
             >
               {/* image song */}
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={image_song || ""} />
+                <Avatar alt="Remy Sharp" src={image_song || ''} />
               </ListItemAvatar>
 
               {/* content item */}
@@ -53,12 +55,12 @@ const ListSongs: React.FC<ListSongsProps> = (props) => {
                 secondary={
                   <React.Fragment>
                     <Typography
-                      sx={{ display: "inline" }}
+                      sx={{ display: 'inline' }}
                       component="span"
                       variant="body2"
                       color="text.primary"
                     >
-                      {name_authors || "--"}
+                      {name_authors || '--'}
                     </Typography>
                     {description}
                   </React.Fragment>

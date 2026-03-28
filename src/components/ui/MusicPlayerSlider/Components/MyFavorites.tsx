@@ -1,23 +1,25 @@
-import * as React from "react";
-import { useTheme } from "@mui/material/styles";
-import { makeStyles } from "@mui/styles";
+import * as React from 'react';
 
-import IconButton from "@mui/material/IconButton";
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { debounce } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import { useTheme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import { equalTo, orderByChild } from 'firebase/database';
+import { useSelector } from 'react-redux';
 
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { useSelector } from "react-redux";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
-import { UserType } from "src/store/UserSlice";
-import { songType } from "src/store/SongSlice";
-import httpRequest from "src/service/httpRequest";
-import { myFavoritesUrl } from "src/apis/request";
-import { debounce } from "@mui/material";
-import { equalTo, orderByChild } from "firebase/database";
+import { myFavoritesUrl } from 'src/apis/request';
+import httpRequest from 'src/service/httpRequest';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import type { songType } from 'src/store/SongSlice';
+import type { UserType } from 'src/store/UserSlice';
+
 
 const useStyle = makeStyles(() => {
   return {
     myFavorites: {
-      position: "absolute !important",
+      position: 'absolute !important',
       right: 0,
     },
   };
@@ -27,11 +29,11 @@ type MyFavoritesProps = object | React.PropsWithChildren;
 
 const MyFavorites: React.FC<MyFavoritesProps> = () => {
   const currentSong = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.SONG] as songType
+    (state: RootState) => state[TYPE_REDUCER.SONG] as songType,
   );
 
   const userDetail = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType,
   );
 
   const theme = useTheme();
@@ -54,8 +56,8 @@ const MyFavorites: React.FC<MyFavoritesProps> = () => {
         // find song in list favorites
         const dataResponse = await httpRequest.getData(
           myFavoritesUrl(),
-          orderByChild("id_song"),
-          equalTo(currentSong._id)
+          orderByChild('id_song'),
+          equalTo(currentSong._id),
         );
 
         // find user in list favorites
@@ -72,12 +74,13 @@ const MyFavorites: React.FC<MyFavoritesProps> = () => {
 
   React.useEffect(() => {
     userDetail.isLogin && handleApiMyFavorites();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSong._id, userDetail.userInfo.id]);
 
   // only show button my Favorites when user logged
   if (!userDetail.isLogin) return <></>;
 
-  const mainIconColor = theme.palette.mode === "dark" ? "#fff" : "#000";
+  const mainIconColor = theme.palette.mode === 'dark' ? '#fff' : '#000';
 
   /**
    * toggle mark and unMark song

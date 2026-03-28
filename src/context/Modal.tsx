@@ -1,4 +1,4 @@
-import { Header } from "src/layouts";
+import { Header } from 'src/layouts';
 
 const Modal = () => {
   return (

@@ -1,1 +1,1 @@
-export { default } from "./MusicPlayerSlider";
+export { default } from './MusicPlayerSlider';

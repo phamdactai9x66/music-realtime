@@ -1,18 +1,23 @@
-import * as React from "react";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import SearchIcon from "@mui/icons-material/Search";
-import ListRooms from "./Components/ListRooms";
-import { Fab, debounce } from "@mui/material";
-import { orderByChild, startAfter } from "firebase/database";
-import { RoomsUrl } from "src/apis/request";
-import httpRequest from "src/service/httpRequest";
-import AddIcon from "@mui/icons-material/Add";
-import { useStreaming } from "src/hook";
-import { LIST_EVENT, publish } from "src/service/event";
-import FormCreateRoom from "src/components/ui/FormCreateRoom";
+import * as React from 'react';
+
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import { Fab, debounce } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { orderByChild, startAfter } from 'firebase/database';
+
+import { RoomsUrl } from 'src/apis/request';
+import FormCreateRoom from 'src/components/ui/FormCreateRoom';
+import { useStreaming } from 'src/hook';
+import { LIST_EVENT, publish } from 'src/service/event';
+import httpRequest from 'src/service/httpRequest';
+
+import ListRooms from './Components/ListRooms';
+
+
 
 type RoomsProps = object & React.PropsWithChildren;
 
@@ -43,14 +48,14 @@ const Rooms: React.FC<RoomsProps> = () => {
 
       if (inputValue) {
         return await handleApiRooms(
-          orderByChild("name_room"),
-          startAfter(inputValue, "name_room")
+          orderByChild('name_room'),
+          startAfter(inputValue, 'name_room'),
         );
       }
 
       handleApiRooms();
     },
-    import.meta.env.VITE_TIME_SEARCH
+    import.meta.env.VITE_TIME_SEARCH,
   );
 
   /**
@@ -64,7 +69,7 @@ const Rooms: React.FC<RoomsProps> = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       <FormControl fullWidth sx={{ m: 1 }}>
         <InputLabel htmlFor="outlined-adornment-amount">Search Room</InputLabel>
         <OutlinedInput
@@ -83,18 +88,18 @@ const Rooms: React.FC<RoomsProps> = () => {
 
       <Fab
         sx={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 20,
-          right: "45%",
-          fontSize: "2rem",
-          outline: "none",
-          ":focus": {
-            outline: "none !important",
+          right: '45%',
+          fontSize: '2rem',
+          outline: 'none',
+          ':focus': {
+            outline: 'none !important',
           },
         }}
-        aria-label={"Add"}
+        aria-label={'Add'}
         onClick={handleModalCreateForm}
-        color={"primary"}
+        color={'primary'}
       >
         <AddIcon />
       </Fab>

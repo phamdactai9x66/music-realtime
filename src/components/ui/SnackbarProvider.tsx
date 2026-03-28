@@ -1,11 +1,13 @@
-import * as React from "react";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import { subscribe, LIST_EVENT, unsubscribe } from "src/service/event";
+import * as React from 'react';
+
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
+import { subscribe, LIST_EVENT, unsubscribe } from 'src/service/event';
 
 type snackbarControllerType = {
   display: boolean;
-  severity: "success" | "info" | "warning" | "error";
+  severity: 'success' | 'info' | 'warning' | 'error';
   message: string;
 };
 
@@ -14,8 +16,8 @@ export default function CustomizedSnackbar() {
   const [snackbarController, setSnackbarController] =
     React.useState<snackbarControllerType>({
       display: false,
-      severity: "info",
-      message: "",
+      severity: 'info',
+      message: '',
     });
 
   // subscribe event snackbar change
@@ -46,9 +48,9 @@ export default function CustomizedSnackbar() {
    */
   const handleClose = (
     event?: React.SyntheticEvent | Event,
-    reason?: string
+    reason?: string,
   ) => {
-    if (reason === "clickaway") return;
+    if (reason === 'clickaway') return;
 
     setSnackbarController((pre) => ({
       ...pre,
@@ -63,15 +65,15 @@ export default function CustomizedSnackbar() {
         autoHideDuration={6000}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
       >
         <Alert
           onClose={handleClose}
           severity={snackbarController.severity}
           variant="filled"
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {snackbarController.message}
         </Alert>

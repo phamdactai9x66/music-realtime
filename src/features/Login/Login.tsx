@@ -1,22 +1,24 @@
-import * as React from "react";
-import GoogleIcon from "@mui/icons-material/Google";
-import Stack from "@mui/material/Stack";
+import * as React from 'react';
 
-import { Button } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import GoogleIcon from '@mui/icons-material/Google';
+import { Button } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import { makeStyles } from '@mui/styles';
 import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
   getAdditionalUserInfo,
-} from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { IUserInfo, loginUser } from "src/store/UserSlice";
-import { useNavigate } from "react-router-dom";
-import { PATH_ROUTER } from "src/routers/routers";
-import httpRequest from "src/service/httpRequest";
-import { userUrl } from "src/apis/request";
-import { LIST_EVENT, publish } from "src/service/event";
+} from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { userUrl } from 'src/apis/request';
+import { PATH_ROUTER } from 'src/routers/routers';
+import { LIST_EVENT, publish } from 'src/service/event';
+import httpRequest from 'src/service/httpRequest';
+import { loginUser } from 'src/store/UserSlice';
+import type { IUserInfo } from 'src/store/UserSlice';
 
 type LoginProps = object & React.PropsWithChildren;
 
@@ -62,13 +64,13 @@ const Login: React.FC<LoginProps> = () => {
 
         // message Welcome user login project
         const messageAlert = `Welcome ${
-          userResponse?.name?.toUpperCase() || "--"
+          userResponse?.name?.toUpperCase() || '--'
         } to Web Music!!`;
 
         // feedback alert for user after login success
         publish(LIST_EVENT.SNACKBAR, {
           display: true,
-          severity: "success",
+          severity: 'success',
           message: messageAlert,
         });
 
@@ -81,7 +83,7 @@ const Login: React.FC<LoginProps> = () => {
         // feedback alert for user after login unsuccess
         publish(LIST_EVENT.SNACKBAR, {
           display: true,
-          severity: "error",
+          severity: 'error',
           message: errorMessage,
         });
       });

@@ -1,4 +1,6 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import * as React from 'react';
+
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -6,14 +8,14 @@ import {
   Typography,
   InputAdornment,
   IconButton,
-} from "@mui/material";
-import { useFormik } from "formik";
-import React from "react";
-import { RoomsUrl } from "src/apis/request";
-import { LIST_EVENT, publish } from "src/service/event";
-import httpRequest from "src/service/httpRequest";
+} from '@mui/material';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-import * as yup from "yup";
+import { RoomsUrl } from 'src/apis/request';
+import { LIST_EVENT, publish } from 'src/service/event';
+import httpRequest from 'src/service/httpRequest';
+
 
 type Props = {
   open: boolean;
@@ -23,13 +25,13 @@ type Props = {
   React.PropsWithChildren;
 
 enum TYPE_FIELD {
-  verify_password = "verify_password",
-  new_password = "new_password",
+  verify_password = 'verify_password',
+  new_password = 'new_password',
 }
 
 const initialValues = {
-  verify_password: "",
-  new_password: "",
+  verify_password: '',
+  new_password: '',
 };
 
 const ChangePassword: React.FC<Props> = (props) => {
@@ -49,7 +51,7 @@ const ChangePassword: React.FC<Props> = (props) => {
     });
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -59,7 +61,7 @@ const ChangePassword: React.FC<Props> = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        if (!idRoom) throw Error("id not found");
+        if (!idRoom) throw Error('id not found');
 
         // get data of current room
         const dataRes = await httpRequest.getOne(RoomsUrl(idRoom));
@@ -72,19 +74,19 @@ const ChangePassword: React.FC<Props> = (props) => {
 
           publish(LIST_EVENT.SNACKBAR, {
             display: true,
-            severity: "success",
-            message: "Your password has been changed successfully",
+            severity: 'success',
+            message: 'Your password has been changed successfully',
           });
 
           return callBack?.();
         }
 
-        throw Error("Your password is incorrect");
+        throw Error('Your password is incorrect');
       } catch (error: Error | any) {
         publish(LIST_EVENT.SNACKBAR, {
           display: true,
-          severity: "error",
-          message: error.message || "Your password is incorrect",
+          severity: 'error',
+          message: error.message || 'Your password is incorrect',
         });
       }
     },
@@ -109,7 +111,7 @@ const ChangePassword: React.FC<Props> = (props) => {
           fullWidth
           label="Verify Password"
           name="verify_password"
-          type={!showType["verify_password"] ? "password" : "text"}
+          type={!showType['verify_password'] ? 'password' : 'text'}
           value={values.verify_password}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -122,7 +124,7 @@ const ChangePassword: React.FC<Props> = (props) => {
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showType["verify_password"] ? (
+                  {showType['verify_password'] ? (
                     <VisibilityOff />
                   ) : (
                     <Visibility />
@@ -139,7 +141,7 @@ const ChangePassword: React.FC<Props> = (props) => {
           fullWidth
           label="New Password"
           name="new_password"
-          type={!showType["new_password"] ? "password" : "text"}
+          type={!showType['new_password'] ? 'password' : 'text'}
           value={values.new_password}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -152,7 +154,7 @@ const ChangePassword: React.FC<Props> = (props) => {
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showType["new_password"] ? (
+                  {showType['new_password'] ? (
                     <VisibilityOff />
                   ) : (
                     <Visibility />
@@ -170,8 +172,8 @@ const ChangePassword: React.FC<Props> = (props) => {
         <Button
           color="primary"
           sx={{
-            ":focus": {
-              outline: "none !important",
+            ':focus': {
+              outline: 'none !important',
             },
           }}
           type="submit"
@@ -186,8 +188,8 @@ const ChangePassword: React.FC<Props> = (props) => {
 };
 
 const validationSchema = yup.object({
-  verify_password: yup.string().required("Verify password is required"),
-  new_password: yup.string().required("New password is required"),
+  verify_password: yup.string().required('Verify password is required'),
+  new_password: yup.string().required('New password is required'),
 });
 
 export default ChangePassword;

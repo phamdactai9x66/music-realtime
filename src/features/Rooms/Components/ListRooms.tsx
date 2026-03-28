@@ -1,26 +1,25 @@
-import React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
+import * as React from 'react';
 
-import Avatar from "@mui/material/Avatar";
-import AvatarGroup from "@mui/material/AvatarGroup";
+import KeyIcon from '@mui/icons-material/Key';
+import { Box, IconButton } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, IconButton } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { PATH_ROUTER } from "src/routers/routers";
-import { useSelector } from "react-redux";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
-import { UserType } from "src/store/UserSlice";
-
-import { addOrRemoveUser } from "src/utils";
-
-import KeyIcon from "@mui/icons-material/Key";
-import httpRequest from "src/service/httpRequest";
-import { RoomsUrl } from "src/apis/request";
-import VerifyPassword from "src/components/ui/FormVertifyPassword/FormVerifyPassword";
-import { LIST_EVENT, publish } from "src/service/event";
+import { RoomsUrl } from 'src/apis/request';
+import VerifyPassword from 'src/components/ui/FormVertifyPassword/FormVerifyPassword';
+import { PATH_ROUTER } from 'src/routers/routers';
+import { LIST_EVENT, publish } from 'src/service/event';
+import httpRequest from 'src/service/httpRequest';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import type { UserType } from 'src/store/UserSlice';
+import { addOrRemoveUser } from 'src/utils';
 
 type Props = {
   listRoomData: looseObj[] | [];
@@ -28,7 +27,7 @@ type Props = {
 
 const ListRooms: React.FC<Props> = (props) => {
   const userDetail = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType,
   );
 
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ const ListRooms: React.FC<Props> = (props) => {
     try {
       const idUser = userDetail.userInfo?.id;
 
-      addOrRemoveUser({ idRoom, idUser }, "ADD");
+      addOrRemoveUser({ idRoom, idUser }, 'ADD');
 
       navigate(`${PATH_ROUTER.ROOMS}/${idRoom}`);
     } catch (error) {
@@ -86,10 +85,10 @@ const ListRooms: React.FC<Props> = (props) => {
   return (
     <List
       sx={{
-        width: "100%",
-        bgcolor: "background.paper",
-        overflow: "auto",
-        maxHeight: "calc(100vh - 200px)",
+        width: '100%',
+        bgcolor: 'background.paper',
+        overflow: 'auto',
+        maxHeight: 'calc(100vh - 200px)',
         paddingRight: (theme) => {
           return theme.spacing(2);
         },
@@ -109,10 +108,10 @@ const ListRooms: React.FC<Props> = (props) => {
                   secondary={
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        "& .MuiAvatar-root": {
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        '& .MuiAvatar-root': {
                           width: 24,
                           height: 24,
                           fontSize: 14,

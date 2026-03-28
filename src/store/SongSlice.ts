@@ -1,4 +1,5 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export type songType = {
   audio_url: string;
@@ -9,15 +10,15 @@ export type songType = {
 } & looseObj;
 
 const initialState: songType = {
-  audio_url: "",
-  description: "",
-  image_song: "",
-  name_authors: "",
-  name_song: "",
+  audio_url: '',
+  description: '',
+  image_song: '',
+  name_authors: '',
+  name_song: '',
 };
 
 export const counterSlice = createSlice({
-  name: "APP/COUNTER",
+  name: 'APP/COUNTER',
   initialState,
   reducers: {
     triggerSong: (state, payload: PayloadAction<songType>) => {

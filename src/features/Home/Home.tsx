@@ -1,17 +1,22 @@
-import * as React from "react";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import SearchIcon from "@mui/icons-material/Search";
-import ListSongs from "src/components/ui/ListItems";
-import SlideImage from "./Components/SlideImage";
-import httpRequest from "src/service/httpRequest";
-import { songUrl } from "src/apis/request";
-import { orderByChild, startAfter } from "firebase/database";
-import { useDispatch } from "react-redux";
-import { songType, triggerSong } from "src/store/SongSlice";
-import { debounce } from "@mui/material";
+import * as React from 'react';
+
+import SearchIcon from '@mui/icons-material/Search';
+import { debounce } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { orderByChild, startAfter } from 'firebase/database';
+import { useDispatch } from 'react-redux';
+
+import { songUrl } from 'src/apis/request';
+import ListSongs from 'src/components/ui/ListItems';
+import httpRequest from 'src/service/httpRequest';
+import type { songType } from 'src/store/SongSlice';
+import { triggerSong } from 'src/store/SongSlice';
+
+import SlideImage from './Components/SlideImage';
+
 
 type HomeProps = object & React.PropsWithChildren;
 
@@ -36,14 +41,14 @@ const Home: React.FC<HomeProps> = () => {
 
       if (inputValue) {
         return handleApiSongs(
-          orderByChild("name_song"),
-          startAfter(inputValue)
+          orderByChild('name_song'),
+          startAfter(inputValue),
         );
       }
 
       handleApiSongs();
     },
-    import.meta.env.VITE_TIME_SEARCH
+    import.meta.env.VITE_TIME_SEARCH,
   );
 
   const onPlaySong = (data: songType) => {
@@ -57,8 +62,8 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <div
       style={{
-        display: "flex",
-        flexWrap: "wrap",
+        display: 'flex',
+        flexWrap: 'wrap',
         gap: 8,
       }}
     >

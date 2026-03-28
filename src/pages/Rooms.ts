@@ -1,1 +1,1 @@
-export { default } from "src/features/Rooms";
+export { default } from 'src/features/Rooms';

@@ -1,17 +1,18 @@
-import { Box, Modal } from "@mui/material";
-import React from "react";
+import * as React from 'react';
 
-import { LIST_EVENT, subscribe, unsubscribe } from "src/service/event";
+import { Box, Modal } from '@mui/material';
 
-type Props = object & React.PropsWithChildren;
+import { LIST_EVENT, subscribe, unsubscribe } from 'src/service/event';
+
+type Props = React.PropsWithChildren;
 
 type TComponent = {
   display: boolean;
   Component: any;
-  ComponentProps: {};
+  ComponentProps: Record<string, unknown>;
 };
 
-const ModalGlobal: React.FC<Props> = (props: Props) => {
+const ModalGlobal: React.FC<Props> = () => {
   const [modal, setModal] = React.useState<TComponent>({
     display: false,
     Component: undefined,
@@ -63,12 +64,12 @@ const ModalGlobal: React.FC<Props> = (props: Props) => {
       >
         <Box
           sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             width: 400,
-            bgcolor: "background.paper",
+            bgcolor: 'background.paper',
             boxShadow: 24,
             p: 4,
           }}

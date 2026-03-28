@@ -1,40 +1,44 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Badge from "@mui/material/Badge";
-import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
-import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
-import { useSelector } from "react-redux";
-import { RootState, TYPE_REDUCER } from "src/store/configureStore";
-import { UserType } from "src/store/UserSlice";
-import httpRequest from "src/service/httpRequest";
-import { RoomsUrl } from "src/apis/request";
-import { useParams } from "react-router-dom";
+import * as React from 'react';
+
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { RoomsUrl } from 'src/apis/request';
+import httpRequest from 'src/service/httpRequest';
+import type { RootState } from 'src/store/configureStore';
+import { TYPE_REDUCER } from 'src/store/configureStore';
+import type { UserType } from 'src/store/UserSlice';
+
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    backgroundColor: "#44b700",
-    color: "#44b700",
+  '& .MuiBadge-badge': {
+    backgroundColor: '#44b700',
+    color: '#44b700',
     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    "&::after": {
-      position: "absolute",
+    '&::after': {
+      position: 'absolute',
       top: 0,
       left: 0,
-      width: "100%",
-      height: "100%",
-      borderRadius: "50%",
-      animation: "ripple 1.2s infinite ease-in-out",
-      border: "1px solid currentColor",
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: 'ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
       content: '""',
     },
   },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
       opacity: 1,
     },
-    "100%": {
-      transform: "scale(2.4)",
+    '100%': {
+      transform: 'scale(2.4)',
       opacity: 0,
     },
   },
@@ -47,19 +51,19 @@ type BadgeAvatarsProps = {
   isOwner?: boolean;
 } & React.PropsWithChildren;
 
-const SmallAvatar = styled(CancelRoundedIcon)(({ theme }) => ({
+const SmallAvatar = styled(CancelRoundedIcon)(() => ({
   width: 20,
   height: 20,
-  cursor: "pointer",
+  cursor: 'pointer',
 }));
 
 export default function BadgeAvatars(props: BadgeAvatarsProps) {
-  const { data = [], label = "", img = "", isOwner } = props || {};
+  const { data = [], label = '', img = '', isOwner } = props || {};
 
   const params = useParams();
 
   const userDetail = useSelector(
-    (state: RootState) => state[TYPE_REDUCER.USER] as UserType
+    (state: RootState) => state[TYPE_REDUCER.USER] as UserType,
   );
 
   const handleKickUser = async (curr: looseObj) => {
@@ -76,16 +80,16 @@ export default function BadgeAvatars(props: BadgeAvatarsProps) {
   return (
     <Stack direction="row" spacing={2}>
       {data.map((curr: looseObj) => {
-        const labelItem = curr?.[label] || "";
+        const labelItem = curr?.[label] || '';
 
-        const imgItem = curr?.[img] || "";
+        const imgItem = curr?.[img] || '';
 
         const isSelf = userDetail?.userInfo?.id != curr?.id;
 
         return (
           <Badge
             overlap="circular"
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             badgeContent={
               isOwner && isSelf ? <SmallAvatar color="error" /> : null
             }
@@ -96,7 +100,7 @@ export default function BadgeAvatars(props: BadgeAvatarsProps) {
             <StyledBadge
               overlap="circular"
               key={curr?._id}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               variant="dot"
             >
               <Avatar alt={labelItem} src={imgItem} />

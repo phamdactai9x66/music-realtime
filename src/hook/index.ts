@@ -1,3 +1,3 @@
-import useStreaming from "./useStreaming";
+import useStreaming from './useStreaming';
 
 export { useStreaming };

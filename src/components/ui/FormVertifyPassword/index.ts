@@ -1,1 +1,1 @@
-export {} from "./FormVerifyPassword";
+export {} from './FormVerifyPassword';

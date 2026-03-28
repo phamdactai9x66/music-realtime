@@ -1,5 +1,5 @@
 export const songUrl = (idSong?: string | undefined) => {
-  let url = "songs";
+  let url = 'songs';
 
   idSong && (url += `/${idSong}`);
 
@@ -7,7 +7,7 @@ export const songUrl = (idSong?: string | undefined) => {
 };
 
 export const userUrl = (idUser?: string | undefined) => {
-  let url = "users";
+  let url = 'users';
 
   idUser && (url += `/${idUser}`);
 
@@ -15,7 +15,7 @@ export const userUrl = (idUser?: string | undefined) => {
 };
 
 export const myFavoritesUrl = (idFavorites?: string | undefined) => {
-  let url = "my_favorites";
+  let url = 'my_favorites';
 
   idFavorites && (url += `/${idFavorites}`);
 
@@ -23,7 +23,7 @@ export const myFavoritesUrl = (idFavorites?: string | undefined) => {
 };
 
 export const RoomsUrl = (idRoom?: string | undefined) => {
-  let url = "room";
+  let url = 'room';
 
   idRoom && (url += `/${idRoom}`);
 
