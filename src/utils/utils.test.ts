@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import httpRequest from 'src/service/httpRequest';
 
-import { cloneObj, addOrRemoveUser, getRouteMatchPath, isMatchRouters } from './utils';
+import { cloneObj, addOrRemoveUser, getRouteMatchPath, isMatchRouters, protectedLoader } from './utils';
 
 // ─── Mock dependencies ────────────────────────────────────────────────────────
 
@@ -188,5 +188,27 @@ describe('addOrRemoveUser', () => {
     expect(httpRequest.getPut).toHaveBeenCalledWith('room/room1', {
       users: ['user1'],
     });
+  });
+});
+
+// ─── protectedLoader ──────────────────────────────────────────────────────────
+
+describe('protectedLoader', () => {
+  it('returns a redirect to /login with from param', () => {
+    const url = new URL('http://localhost/rooms');
+    const result = protectedLoader({ request: { url: url.href } } as any);
+
+    expect(result).toBeInstanceOf(Response);
+    expect(result.status).toBe(302);
+    expect(result.headers.get('Location')).toBe('/login?from=%2Frooms');
+  });
+
+  it('preserves nested path in from param', () => {
+    const url = new URL('http://localhost/rooms/abc123');
+    const result = protectedLoader({ request: { url: url.href } } as any);
+
+    expect(result.headers.get('Location')).toBe(
+      '/login?from=%2Frooms%2Fabc123',
+    );
   });
 });
