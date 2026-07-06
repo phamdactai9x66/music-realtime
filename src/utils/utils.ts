@@ -20,15 +20,15 @@ export function getRouteMatchPath(
 ): any {
   const matches = matchRoutes(routes, location);
 
-  const getPath = (route: RouteObject) => {
+  const getPath2 = (route: RouteObject) => {
     let path = route.path!;
     if (route.children?.length) {
-      path += getPath(route.children[0]);
+      path += getPath2(route.children[0]);
     }
     return path;
   };
   if (matches?.length) {
-    return getPath(matches[0].route);
+    return getPath2(matches[0].route);
   }
   return null;
 }
