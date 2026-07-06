@@ -1,14 +1,9 @@
-import type {
-  LoaderFunctionArgs,
-  RouteObject } from 'react-router-dom';
-import {
-  matchRoutes,
-  redirect,
-} from 'react-router-dom';
+import type { LoaderFunctionArgs, RouteObject } from "react-router-dom";
+import { matchRoutes, redirect } from "react-router-dom";
 
-import { RoomsUrl } from 'src/apis/request';
-import { PATH_ROUTER } from 'src/routers/routers';
-import httpRequest from 'src/service/httpRequest';
+import { RoomsUrl } from "src/apis/request";
+import { PATH_ROUTER } from "src/routers/routers";
+import httpRequest from "src/service/httpRequest";
 
 export const formatData = () => {};
 
@@ -65,9 +60,9 @@ export function protectedLoader({ request }: LoaderFunctionArgs) {
   // to this page upon successful authentication
   const params = new URLSearchParams();
 
-  params.set('from', new URL(request.url).pathname);
+  params.set("from", new URL(request.url).pathname);
 
-  return redirect('/login?' + params.toString());
+  return redirect("/login?" + params.toString());
 }
 
 /**
@@ -88,7 +83,7 @@ export function cloneObj(data: looseObj) {
 
 export async function addOrRemoveUser(
   data: { idUser?: string; idRoom?: string },
-  type: 'ADD' | 'REMOVE',
+  type: "ADD" | "REMOVE",
 ) {
   try {
     const { idUser, idRoom } = data;
@@ -101,12 +96,12 @@ export async function addOrRemoveUser(
     let users = cloneObj(dataRoom?.users || []) as string[];
 
     // add if song unExist in list
-    if (type == 'ADD' && !users.includes(idUser)) {
+    if (type == "ADD" && !users.includes(idUser)) {
       users.push(idUser);
     }
 
     // add if song unExist in list
-    if (type == 'REMOVE' && users.includes(idUser)) {
+    if (type == "REMOVE" && users.includes(idUser)) {
       users = users.filter((id) => id != idUser);
     }
 
