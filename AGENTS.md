@@ -45,6 +45,20 @@ Firebase projects: `music-realtime-34252` (default), `test12-873e4` (uat).
 - Test setup: `src/setupTests.ts` imports `@testing-library/jest-dom`.
 - Run a single test file: `npx vitest run src/utils/utils.test.ts`.
 
+## Agent skills
+
+### Issue tracker
+
+Issues tracked as GitHub issues via the `gh` CLI. External PRs are not a triage surface. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+All five canonical roles use their default names. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context repo. See `docs/agents/domain.md`.
+
 ## Project structure
 
 | Directory | Role |
